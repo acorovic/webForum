@@ -72,9 +72,10 @@ public class Database {
 						new BufferedInputStream(
 								new FileInputStream(Config.DEFAULT_SAVE_LOCATION + DATABASE_FILENAME)));
 		
-			application = (WebApplication) in.readObject();
+			application = ((WebApplication) in.readObject());
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("==================================== ERORR =========================");
 		} finally {
 			if(in != null) {
 				try {
@@ -115,6 +116,17 @@ public class Database {
 	public void addUser(User user) {
 		application.getUsers().add(user);
 		saveDatabase();
+	}
+	
+	public boolean changeUserRole(String username, Config.Role role) {
+		for(User user : application.getUsers()) {
+			if(user.getUsername().equals(username)) {
+				user.setRole(role);
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	
