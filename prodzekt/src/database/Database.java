@@ -102,6 +102,21 @@ public class Database {
 		application.setUsers(users);
 	}
 	
+	public User searchUser(String username) {
+		for(User user : application.getUsers()) {
+			if(user.getUsername().equals(username)) {
+				return user;
+			}
+		}
+		
+		return null;
+	}
+	
+	public void addUser(User user) {
+		application.getUsers().add(user);
+		saveDatabase();
+	}
+	
 	
 	
 }

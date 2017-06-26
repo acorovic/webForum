@@ -26,7 +26,8 @@ public class WebApplication implements Serializable {
 		User admin = new User("admin", "admin", "name", "surname", "email", "phoneNumber");
 		
 		admin.setRole(Role.ADMIN);	
-		
+		users.add(user1);
+		users.add(admin);
 	}
 	
 	
