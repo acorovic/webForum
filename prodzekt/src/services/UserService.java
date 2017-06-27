@@ -17,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+
 import utils.Config;
 import beans.User;
 import database.Database;
@@ -135,6 +136,20 @@ public class UserService {
 			}
 		} else {
 			return "Must be logged in to change user role!";
+		}
+	}
+	
+	@GET
+	@Path("/active")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User getActiveUser() {
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		
+		if(user != null) {
+			return user;
+		} else {
+			return null;
 		}
 	}
 	
