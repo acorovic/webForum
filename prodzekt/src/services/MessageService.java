@@ -30,7 +30,7 @@ public class MessageService {
 	@POST
 	@Path("/sendMessage")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String sendMessage(@FormParam("receiver") String receiverId, @FormParam("content") String content) {
+	public String sendMessage(@FormParam("username") String receiverId, @FormParam("content") String content) {
 		HttpSession session = request.getSession();
 		
 		User user = (User) session.getAttribute("user");

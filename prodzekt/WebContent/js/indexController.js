@@ -17,7 +17,7 @@ $(document).ready(function () {
 	});
 
 	//send message form
-	var sendMessageId = 'messageForm';
+	var sendMessageId = 'sendMessageForm';
 	$('#' + sendMessageId).submit(function (e) {
 		handleForm(e, sendMessageId);
 	});
@@ -41,8 +41,11 @@ function checkLoggedInStatus() {
 			$('#navbarLoggedIn').show();
 			$('#navbarLogin').hide();
 			$('#navbarRegister').hide();
-			$('#registerUser').hide();	
+			$('#registerUser').hide();
+			$('#sendMessageButton').show();
 			loadMessages();
+		} else {
+			$('#sendMessageButton').hide();
 		}
 	});
 }

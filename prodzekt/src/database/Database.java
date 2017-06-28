@@ -75,7 +75,6 @@ public class Database {
 			application = ((WebApplication) in.readObject());
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("==================================== ERORR =========================");
 		} finally {
 			if(in != null) {
 				try {

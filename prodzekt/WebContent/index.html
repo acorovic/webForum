@@ -122,7 +122,7 @@
 		</div>
 
 		<div class="col-sm-offset-11 col-sm-10">
-			<button type="submit" class="btn btn-primary text-right" data-toggle="modal" data-target="#sendMessageModal">Send message</button>
+			<button type="submit" id="sendMessageButton" class="btn btn-primary text-right" data-toggle="modal" data-target="#sendMessageModal">Send message</button>
 		</div>
 
     </div>
@@ -172,7 +172,7 @@
 					<h4 class="modal-title">Send message</h4>
 				</div>
 				<div class="modal-body">
-					<form id="sendMessageForm" class="form-horizontal" method="POST" role="form">
+					<form id="sendMessageForm" class="form-horizontal" action="/prodzekt/rest/messages/sendMessage" method="POST" role="form">
 
 						<div class="form-group">
 							<label for="username" class="col-sm-2 control-label">Send message to</label>
@@ -184,7 +184,7 @@
 						<div class="form-group">
 							<div class="col-sm-10 col-sm-offset-2">
 								<!--<input name="username" type="text" class="form-control" id="messageSend" placeholder="Your message here">-->
-								<textarea class="form-control inputstl" rows="5" placeholder="Your message here"></textarea>
+								<textarea class="form-control inputstl" rows="5" placeholder="Your message here" name="content" form="sendMessageForm"></textarea>
 							</div>
 						</div>
 
@@ -195,6 +195,19 @@
 						</div>
 					</form>
 				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="showInbox" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Inbox</h4>
+				</div>
+				<div class="modal-body" id="inboxMessages">
+				 </div>
 			</div>
 		</div>
 	</div>
