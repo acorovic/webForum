@@ -18,7 +18,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 
+
 import utils.Config;
+import beans.Message;
 import beans.User;
 import database.Database;
 
@@ -151,6 +153,29 @@ public class UserService {
 		} else {
 			return null;
 		}
+	}
+	
+	@GET
+	@Path("/seen/{messageId}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String setMessageSeen(@PathParam("messageId") int messageId) {
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		
+		if(user != null) {
+			ArrayList<Message> messages = (ArrayList<Message>) user.getReceivedMessages();
+			if (messages != null) {
+				for(Message item : messages) {
+					if(item.getMessageId() == messageId) {
+						item.setSeen(true);
+						db.saveDatabase();
+						return "Message read!";
+					}
+				}
+			}
+		}
+		
+		return "Error";
 	}
 	
 

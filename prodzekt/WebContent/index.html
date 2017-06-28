@@ -129,7 +129,7 @@
     <div class="row">
     	<br>
 	    <div class="col-sm-offset-11 col-sm-10">
-			<button type="submit" class="btn btn-primary text-right" data-toggle="modal" data-target="#changeUserRoleModal">Change user role</button>
+			<button type="submit" id="changeUserRoleButton" class="btn btn-primary text-right" data-toggle="modal" data-target="#changeUserRoleModal">Change user role</button>
 		</div>
 	</div>
   </div>
@@ -189,7 +189,6 @@
 
 						<div class="form-group">
 							<div class="col-sm-10 col-sm-offset-2">
-								<!--<input name="username" type="text" class="form-control" id="messageSend" placeholder="Your message here">-->
 								<textarea class="form-control inputstl" rows="5" placeholder="Your message here" name="content" form="sendMessageForm"></textarea>
 							</div>
 						</div>
@@ -205,6 +204,7 @@
 		</div>
 	</div>
 	
+	<!-- show inbox modal -->
 	<div id="showInbox" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -227,12 +227,12 @@
 					<h4 class="modal-title">Change user role</h4>
 				</div>
 				<div class="modal-body">
-					<form id="sendMessageForm" class="form-horizontal" method="POST" role="form">
+					<form id="changeUserRoleForm" class="form-horizontal" action="/prodzekt/rest/users/update" method="PUT" role="form">
 
 						<div class="form-group">
 							<label for="username" class="col-sm-2 control-label">User</label>
 							<div class="col-sm-10">
-								<input name="username" type="text" class="form-control" id="usernameSend" placeholder="Enter username">
+								<input name="username" type="text" class="form-control" id="usernameChangeRole" placeholder="Enter username">
 							</div>
 						</div>
 
@@ -240,18 +240,12 @@
 							<label for="username" class="col-sm-2 control-label">Add role</label>
 							<div class="col-sm-10" class="dropdown">
 							
-								  <select class="form-control" id="sel1">
-								    <option>Admin</option>
-								    <option>Moderator</option>
-								    <option>User</option>
+								  <select class="form-control" id="selectUserRole">
+								    <option value="0">Admin</option>
+								    <option value="1">Moderator</option>
+								    <option value="2">User</option>
 								  </select>
 								
-								<!--<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Chose role<span class="caret"></span></button>
-								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-							    <li><a href="#">Admin</a></li>
-							    <li><a href="#">Moderator</a></li>
-							    <li><a href="#">Common user</a></li>
-							  	</ul> -->
 							</div>
 						</div>
 

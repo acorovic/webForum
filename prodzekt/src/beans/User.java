@@ -40,12 +40,15 @@ public class User implements Serializable {
 		this.savedTopics = new ArrayList<Topic>();
 		this.savedComments = new ArrayList<Comment>();
 		this.receivedMessages = new ArrayList<Message>();
+		
 	}
 	
 	public void addMessage(Message message) {
 		this.receivedMessages.add(message);
 	}
 
+
+	
 	public List<Message> getReceivedMessages() {
 		return receivedMessages;
 	}

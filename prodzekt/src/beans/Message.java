@@ -10,6 +10,8 @@ public class Message implements Serializable{
 	
 	private boolean seen;
 	private boolean isReport;
+	private int messageId;
+
 	
 	public Message(String sender, String receiver, String content) {
 		super();
@@ -18,10 +20,17 @@ public class Message implements Serializable{
 		this.content = content;
 		this.seen = false;
 		this.isReport = false;
+		this.messageId = hashCode();
 	}
 	
-	
-	
+	public int getMessageId() {
+		return messageId;
+	}
+
+	public void setMessageId(int messageId) {
+		this.messageId = messageId;
+	}
+
 	public String getSender() {
 		return sender;
 	}

@@ -22,15 +22,50 @@ $(document).ready(function () {
 		handleForm(e, sendMessageId);
 	});
 	
+	var changeUserRoleId = 'changeUserRoleForm';
+	$('#' + changeUserRoleId).submit(function (e){
+		e.preventDefault();
+		changeUserRole();
+	});
+	
 
 	//buttons
 	$('#logout').click(function () {
 		logoutUser();
 	});
-
 	
-
 });
+
+function changeUserRole() {
+	var user = $('#usernameChangeRole').val();
+	var selectRole = $('#selectUserRole').val();
+	role = "";
+	switch(selectRole) {
+	case "0":
+		role = "admin";
+		break;
+	case "1":
+		role = "moderator";
+		break;
+	case "2":
+		role = "user";
+		break;
+	default:
+		role = "";
+	}
+	
+	if(role != "") {
+		$.ajax({
+			url: baseUrl + "/users/update/" + role + "/" + user,
+			method: 'PUT'
+		}).then(function(message) {
+			alert(message);
+		});
+	} else {
+		alert("Error!");
+	}
+	
+}
 
 function checkLoggedInStatus() {
 	$.ajax({
@@ -43,9 +78,15 @@ function checkLoggedInStatus() {
 			$('#navbarRegister').hide();
 			$('#registerUser').hide();
 			$('#sendMessageButton').show();
+			if(user.role != "ADMIN") {
+				$('#changeUserRoleButton').hide();
+			} else {
+				$('#changeUserRoleButton').show();
+			}
 			loadMessages();
 		} else {
 			$('#sendMessageButton').hide();
+			$('#changeUserRoleButton').hide();
 		}
 	});
 }
@@ -63,24 +104,40 @@ function loadMessages() {
 	$.ajax({
 		url: baseUrl + "/messages/getMessages"
 	}).then(function (messages) {
-		var i = 0;
 		var unseenMessages = 0;
-		
 		messages.forEach(function (message) {
 			var messageRow ='<h4>Message from: ' + message.sender + '</h4>' + message.content;
 
 			if(message.seen == false) {
-				messageRow += '<br>' + '<br>' + '&nbsp; <button type="button" id="seen'+ i + '" class="btn btn-info btn-sm"> Read </button>' + '<hr>'; 
+				messageRow += '<br>' + '<br>' + '&nbsp; <button type="button" id="seen'+ message.messageId + '" class="btn btn-info btn-sm"> Read </button>'; 
 				unseenMessages++;
+				
 			}
 
-			$('#inboxMessages').append(messageRow + '</p>');
+			$('#inboxMessages').append(messageRow + '<hr></p>');
+			
+			if(message.seen == false) {
+				$('#seen' + message.messageId).click(function() {
+					setMessageSeen(message.messageId);
+				});
+			}
 
-			i++;
 		});
 
 		$('#receivedMessages').text(unseenMessages);
 
+	});
+}
+
+function setMessageSeen(messageId) {
+	$.ajax({
+		url: baseUrl + "/users/seen/" + messageId
+	}).then(function(message) {
+		alert(message);
+		var cnt = $('#receivedMessages').text();
+		$('#seen' + messageId).hide();
+		$('#receivedMessages').text(--cnt);
+		
 	});
 }
 
