@@ -67,10 +67,10 @@ function loadMessages() {
 		var unseenMessages = 0;
 		
 		messages.forEach(function (message) {
-			var messageRow = '<p>' + message.sender + " " + message.content;
+			var messageRow ='<h4>Message from: ' + message.sender + '</h4>' + message.content;
 
 			if(message.seen == false) {
-				messageRow += '&nbsp; <button type="button" id="seen'+ i + '" class="btn btn-info btn-sm"> Read </button>'; 
+				messageRow += '<br>' + '<br>' + '&nbsp; <button type="button" id="seen'+ i + '" class="btn btn-info btn-sm"> Read </button>' + '<hr>'; 
 				unseenMessages++;
 			}
 
