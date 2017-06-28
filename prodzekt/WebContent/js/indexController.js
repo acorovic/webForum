@@ -6,17 +6,29 @@ $(document).ready(function () {
 
 
 	checkLoggedInStatus();
+
+	
 	
 	//forms
+	//login form
 	var loginFormId = 'loginForm';
 	$('#' + loginFormId).submit(function (e) {
 		handleForm(e, loginFormId);
 	});
+
+	//send message form
+	var sendMessageId = 'messageForm';
+	$('#' + sendMessageId).submit(function (e) {
+		handleForm(e, sendMessageId);
+	});
 	
+
 	//buttons
 	$('#logout').click(function () {
 		logoutUser();
 	});
+
+	
 
 });
 
@@ -30,6 +42,7 @@ function checkLoggedInStatus() {
 			$('#navbarLogin').hide();
 			$('#navbarRegister').hide();
 			$('#registerUser').hide();	
+			loadMessages();
 		}
 	});
 }
@@ -42,6 +55,31 @@ function logoutUser() {
 		refresh();
 	});
 } 
+
+function loadMessages() {
+	$.ajax({
+		url: baseUrl + "/messages/getMessages"
+	}).then(function (messages) {
+		var i = 0;
+		var unseenMessages = 0;
+		
+		messages.forEach(function (message) {
+			var messageRow = '<p>' + message.sender + " " + message.content;
+
+			if(message.seen == false) {
+				messageRow += '&nbsp; <button type="button" id="seen'+ i + '" class="btn btn-info btn-sm"> Read </button>'; 
+				unseenMessages++;
+			}
+
+			$('#inboxMessages').append(messageRow + '</p>');
+
+			i++;
+		});
+
+		$('#receivedMessages').text(unseenMessages);
+
+	});
+}
 
 function handleForm(e, formId) {
 	var form = $('#' + formId);
