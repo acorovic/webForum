@@ -22,6 +22,7 @@ public class User implements Serializable {
 	private List<Subforum> followedSubforums;
 	private List<Topic> savedTopics;
 	private List<Comment> savedComments;
+	private List<Message> receivedMessages;
 
 	public User(String username, String password, String name, String surname, String email, String phoneNumber) {
 		super();
@@ -38,6 +39,19 @@ public class User implements Serializable {
 		this.followedSubforums = new ArrayList<Subforum>();
 		this.savedTopics = new ArrayList<Topic>();
 		this.savedComments = new ArrayList<Comment>();
+		this.receivedMessages = new ArrayList<Message>();
+	}
+	
+	public void addMessage(Message message) {
+		this.receivedMessages.add(message);
+	}
+
+	public List<Message> getReceivedMessages() {
+		return receivedMessages;
+	}
+
+	public void setReceivedMessages(List<Message> receivedMessages) {
+		this.receivedMessages = receivedMessages;
 	}
 
 	public List<Subforum> getFollowedSubforums() {
