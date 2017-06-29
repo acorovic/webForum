@@ -22,6 +22,11 @@ $(document).ready(function () {
 		handleForm(e, sendMessageId);
 	});
 	
+	var registerFormId = 'registerForm';
+	$('#' + registerFormId).submit(function (e) {
+		handleForm(e, registerFormId);
+	});
+	
 	var changeUserRoleId = 'changeUserRoleForm';
 	$('#' + changeUserRoleId).submit(function (e){
 		e.preventDefault();
@@ -60,6 +65,7 @@ function changeUserRole() {
 			method: 'PUT'
 		}).then(function(message) {
 			alert(message);
+			refresh();
 		});
 	} else {
 		alert("Error!");
