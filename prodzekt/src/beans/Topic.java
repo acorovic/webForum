@@ -20,6 +20,8 @@ public class Topic implements Serializable{
 	
 	private List<Comment> comments;
 	
+	private int topicId;
+	
 	public Topic(String name, User author, String content, String parentSubforum) {
 		super();
 		this.name = name;
@@ -33,7 +35,13 @@ public class Topic implements Serializable{
 		this.date = (new Date()).toString();
 		this.type = "text";
 		
+		this.topicId = hashCode();
+		
 		this.comments = new ArrayList<Comment>();
+	}
+	
+	public int getTopicId() {
+		return this.topicId;
 	}
 	
 	public void like() {

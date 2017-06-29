@@ -17,6 +17,8 @@ public class Subforum implements Serializable {
 	
 	private List<Topic> topics;
 	
+	private int subforumId;
+	
 	public Subforum(String name, String description, String icon, String rules, User responsibleModerator) {
 		super();
 		this.name = name;
@@ -28,7 +30,12 @@ public class Subforum implements Serializable {
 		this.topics = new ArrayList<Topic>();
 		
 		this.moderators = new ArrayList<User>();
+		this.subforumId = hashCode();
 		moderators.add(responsibleModerator);
+	}
+	
+	public int getSubforumId() {
+		return this.subforumId;
 	}
 
 	public void addTopic(Topic topic) {

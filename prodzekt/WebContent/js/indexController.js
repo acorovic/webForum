@@ -7,6 +7,7 @@ $(document).ready(function () {
 
 	checkLoggedInStatus();
 
+	loadSubforums();
 	
 	
 	//forms
@@ -40,6 +41,7 @@ $(document).ready(function () {
 	});
 	
 });
+
 
 function changeUserRole() {
 	var user = $('#usernameChangeRole').val();
@@ -134,6 +136,50 @@ function loadMessages() {
 
 	});
 }
+
+function loadSubforums() {
+	$.ajax({
+		url: baseUrl + "/subforums/getSubforums"
+	}).then(function (subforums){
+		if(subforums != undefined) {
+			subforums.forEach(function (subforum) {
+				var subforumRow = '<li> <a href="#" id="subforum' + subforum.subforumId + '">' + subforum.name + '</a></li>';
+				
+				$('#subforums').append(subforumRow);
+				
+				$('#subforum' + subforum.subforumId).click(function () {
+					//TODO: add full view of subforum and all themes
+					alert(subforum.name);
+				});
+				
+				var subforumPreviewPanel = createSubforumPreviewPanel(subforum);
+				
+				$('#subforumsTopicsPreview').append(subforumPreviewPanel);
+				
+			});
+		}
+	});
+}
+
+function createSubforumPreviewPanel(subforum) {
+	var ret;
+	var header = '<div class="row"> <section class="panel panel-info col-md-10"><section class="row panel-body"><section> <h4>' + subforum.name + "</h4> <h5>" + subforum.description + "</h5><hr>";
+	ret = header;
+	var row = '<section class="row"> <ul>';
+	topics = subforum.topics;
+	if(topics != undefined) {
+		topics.forEach(function (topic) {
+			row += '<li class="list-unstyled"><a href="#"><i class="glyphicon glyphicon-comment"> </i>  ' + topic.name + '</a></li>';
+		});
+	}
+	
+	row += "</ul>";
+	ret += row + '</div></section></section></section></section>';
+	
+	return ret;
+}
+			
+
 
 function setMessageSeen(messageId) {
 	$.ajax({
