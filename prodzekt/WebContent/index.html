@@ -84,7 +84,7 @@
 			</div>
 </div>
 
-<div class="container col-md-6">
+<div class="container col-md-13">
 	<div class="row" id="rightContainer">
 
 			<div id="registerUser">
@@ -183,6 +183,47 @@
 		</div>
 	</div>
 
+	<!--Aleksin modal koji nisam bas najbolje skontao-->
+	<div id="commentModal" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">teme i komentari</h4>
+				</div>
+				<div class="modal-body">
+					<form id="commentForm" class="form-horizontal" method="POST" role="form">
+
+						<div class="form-group">
+							<label for="username" class="col-sm-2 control-label"><h4>tekuca tema</h4></label>
+						</div>
+
+						<div class="form-group">
+							<label for="username" class="col-sm-2 control-label">Your comment</label>
+							<div class="col-sm-10 col-sm-offset-2">
+								<textarea class="form-control inputstl" rows="5" placeholder="Your comment here" name="content" form="sendMessageForm"></textarea>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<button type="submit" class="btn btn-primary text-right">Send</button>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-11">
+								<button type="submit" class="btn btn-primary text-right">Delete</button>
+							</div>
+							<br>
+							<br>
+							<hr>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!--Send message-->
 	<div id="sendMessageModal" class="modal fade" role="dialog">
 		<div class="modal-dialog modal-lg">
@@ -217,7 +258,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- show inbox modal -->
 	<div id="showInbox" class="modal fade" role="dialog">
 		<div class="modal-dialog">
