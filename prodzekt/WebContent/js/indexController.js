@@ -156,25 +156,42 @@ function loadSubforums() {
 				
 				$('#subforumsTopicsPreview').append(subforumPreviewPanel);
 				
+				addTopicClickHandlers(subforum.topics);
+				
 			});
 		}
 	});
 }
 
+function addTopicClickHandlers(topics) {
+	topics.forEach(function(topic) {
+		$('#topicClick' + topic.topicId).click(function (){
+			$('#topicName').innerHTML = "";
+			$('#topicComments').innerHTML = "";
+			
+			var row = '<h4 class="modal-title">' + topic.name + '</h4>';
+			
+			$('#topicName').append(row);
+			
+			$('#topicModal').modal('show');
+		});
+	});
+}
+
 function createSubforumPreviewPanel(subforum) {
 	var ret;
-	var header = '<div class="row"> <section class="panel panel-info col-md-10"><section class="row panel-body"><section> <h4>' + subforum.name + "</h4> <h5>" + subforum.description + "</h5><hr>";
+	var header = '<div class="row"> <section class="panel panel-info col-md-9"><section class="row panel-body"><section> <h4>' + subforum.name + "</h4> <h5>" + subforum.description + "</h5><hr>";
 	ret = header;
 	var row = '<section class="row"> <ul>';
 	topics = subforum.topics;
 	if(topics != undefined) {
 		topics.forEach(function (topic) {
-			row += '<li class="list-unstyled"><a href="#"><i class="glyphicon glyphicon-comment"> </i>  ' + topic.name + '</a></li>';
+			row += '<li class="list-unstyled"><a href="#" id="topicClick' + topic.topicId + '"><i class="glyphicon glyphicon-comment"> </i>  ' + topic.name + '</a></li>';
 		});
 	}
 	
 	row += "</ul>";
-	ret += row + '</div></section></section></section></section>';
+	ret += row + '</section></section></section></section>';
 	
 	return ret;
 }
