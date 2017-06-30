@@ -179,6 +179,9 @@ function addTopicClickHandlers(topics) {
 					var commentRow = '<div id="commentId' + comment.commentId + '"> <section class="panel panel-info col-md-12"><section class="row panel-body">';
 					commentRow += '<section class="col-md-3"> <h4>' + comment.author.username + '</h4> ' + comment.date + '</section>';
 					commentRow += '<section class="col-md-9">' + comment.text + '</section>';
+					commentRow += '<hr><section class="col-md-0">' + '<button type="button">Delete</button>';
+					commentRow += '<section class="col-md-3">' + '<button type="button">Report</button>';
+					commentRow += '<section class="col-md-6">' + '<button type="button">Like</button>' + '</section>';
 					
 					commentRow += '</section></section></div>';
 					$('#topicComments').append(commentRow);
