@@ -78,8 +78,9 @@
 
   <div class="container col-md-4 col-md-offset-2" id="leftContainter">
   			<div class="row col-md-9" id="newSubforumDiv">
-  			<button id="createNewSubforum" type="button" class="btn btn-primary"> <i class="glyphicon glyphicon-plus"> </i> Add new subforum</button>
-   			<hr>
+  				<button id="createNewSubforum" type="button" class="btn btn-primary" data-toggle="modal" data-target="#createSubforumModal"> 
+  				<i class="glyphicon glyphicon-plus"> </i> Add new subforum</button>
+   				<hr>
    			</div>
    			
 			<div id="subforumsTopicsPreview">
@@ -259,6 +260,51 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- Create subfourm modal -->
+	<div id="createSubforumModal" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Create subforum</h4>
+				</div>
+				<div class="modal-body">
+					<form id="createSubforumForm" class="form-horizontal" action="/prodzekt/rest/subforums" method="POST" role="form">
+
+						<div class="form-group">
+							<label for="subforumName" class="col-sm-2 control-label">Subforum name:</label>
+							<div class="col-sm-10">
+								<input name="subforumName" type="text" class="form-control" id="subforumName" placeholder="Enter subforum name">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="subforumDescription" class="col-sm-2 control-label">Subforum description:</label>
+							<div class="col-sm-10">
+								<textarea class="form-control inputstl" rows="3" name="subforumDescription" placeholder="Subforum description here" name="content" form="createSubforumForm"></textarea>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="subforumRules" class="col-sm-2 control-label">Subforum rules:</label>
+							<div class="col-sm-10">
+								<textarea class="form-control inputstl" rows="6" name="subforumRules" placeholder="Subforum rules here" name="content" form="createSubforumForm"></textarea>
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<button type="submit" class="btn btn-primary text-right">Add</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 
 	<!-- show inbox modal -->
 	<div id="showInbox" class="modal fade" role="dialog">

@@ -33,11 +33,17 @@ $(document).ready(function () {
 		changeUserRole();
 	});
 	
+	var createSubforumId = 'createSubforumForm';
+	$('#' + createSubforumId).submit(function (e) {
+		handleForm(e, createSubforumId);
+	});
+	
 
 	//buttons
 	$('#logout').click(function () {
 		logoutUser();
 	});
+	
 	
 	loadSubforums();
 	
@@ -215,7 +221,7 @@ function addTopicClickHandlers(topics) {
 function createSubforumPreviewPanel(subforum) {
 	var ret;
 	var header = '<div class="row"> <section class="panel panel-info col-md-9"><section class="row panel-body"><section class="col-md-8"> <h4>'; 
-	header += subforum.name /**/ + "</h4>  <h5>" + subforum.description + "</h5><hr>";
+	header += subforum.name + "</h4>  <h5>" + subforum.description + "</h5><hr>";
 	ret = header;
 	var row = '<section> <ul>';
 	topics = subforum.topics;
@@ -227,8 +233,8 @@ function createSubforumPreviewPanel(subforum) {
 	
 	row += "</ul>";
 	ret += row + '</section></section> <section class="col-md-2">';
-	ret += '<button type="button" class="btn btn-primary"> <i class="glyphicon glyphicon-plus"> </i> Add topic</button>';
-	ret += '<button type="button" class="btn btn-danger"> <i class="glyphicon glyphicon-trash"> </i> Delete</button></section></section></section>';
+	ret += '<button type="button" class="btn btn-primary btn-sm"> <i class="glyphicon glyphicon-plus"> </i> Add topic</button>';
+	ret += '<button type="button" class="btn btn-danger btn-sm"> <i class="glyphicon glyphicon-trash"> </i> Delete</button></section></section></section>';
 	
 	return ret;
 }
