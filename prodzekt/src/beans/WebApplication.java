@@ -39,6 +39,10 @@ public class WebApplication implements Serializable {
 		Topic top1 = new Topic("pasulj", admin, "kako napraviti", sub1.getName());
 		Topic top2 = new Topic("riza", admin, "ne valja", sub1.getName());
 		
+		Comment com1 = new Comment(admin, "testKomentar", top1, null);
+		
+		top1.addComent(com1);
+		
 		
 		sub1.addTopic(top1);
 		sub1.addTopic(top2);

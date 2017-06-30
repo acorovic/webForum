@@ -15,9 +15,9 @@ public class Comment implements Serializable{
 	private boolean modified;
 	
 	private Comment parentComment;
-	private List<Comment> childComments;
+	//private List<Comment> childComments;
 	
-	private Topic parentTopic;
+	//private Topic parentTopic;
 	
 	private int commentId;
 	
@@ -25,7 +25,7 @@ public class Comment implements Serializable{
 		super();
 		this.author = author;
 		this.text = text;
-		this.parentTopic = parentTopic;
+		//this.parentTopic = parentTopic;
 		this.parentComment = parentComment;
 		
 		this.date = (new Date()).toString();
@@ -33,9 +33,17 @@ public class Comment implements Serializable{
 		this.dislikes = 0;
 		this.modified = false;
 		
-		this.childComments = new ArrayList<Comment>();
+		//this.childComments = new ArrayList<Comment>();
 		
 		this.commentId = hashCode();
+	}
+	
+	public void setCommentId(int commentId) {
+		this.commentId = commentId;
+	}
+
+	public int getCommentId() {
+		return this.commentId;
 	}
 	
 	public void like() {
@@ -101,7 +109,7 @@ public class Comment implements Serializable{
 	public void setParentComment(Comment parentComment) {
 		this.parentComment = parentComment;
 	}
-
+/*
 	public List<Comment> getChildComments() {
 		return childComments;
 	}
@@ -117,7 +125,7 @@ public class Comment implements Serializable{
 	public void setParentTopic(Topic parentTopic) {
 		this.parentTopic = parentTopic;
 	}
-	
+	*/
 	@Override
 	public String toString() {
 		return "Comment [author=" + author + ", date=" + date + ", text=" + text + ", likes=" + likes + ", dislikes="
