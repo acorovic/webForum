@@ -4,7 +4,6 @@ $(document).ready(function () {
 	$('#navbarLoggedIn').hide();
 	$('#adminActionsPanel').hide();
 
-
 	checkLoggedInStatus();
 
 	
@@ -90,6 +89,7 @@ function checkLoggedInStatus() {
 			$('#sendMessageButton').show();
 			if(user.role != "ADMIN") {
 				$('#changeUserRoleButton').hide();
+				userRole = "ADMIN";
 			} else {
 				$('#changeUserRoleButton').show();
 			}
@@ -171,7 +171,7 @@ function addTopicClickHandlers(topics) {
 			$('#topicName').html("");
 			$('#topicComments').html("");
 			
-			var row = '<h4 class="modal-title">' + topic.name + '</h4>' + '<hr>' + '<section class="col-md-0">' + '<button type="button" class="btn btn-primary btn-sm">Create new theme</button>' + '</section>';
+			var row = '<h4 class="modal-title">' + topic.name + '</h4>';
 			
 			$('#topicName').append(row);
 			if(topic.comments != undefined) {
@@ -179,11 +179,12 @@ function addTopicClickHandlers(topics) {
 					var commentRow = '<div id="commentId' + comment.commentId + '"> <section class="panel panel-info col-md-12"><section class="row panel-body">';
 					commentRow += '<section class="col-md-3"> <h4>' + comment.author.username + '</h4> ' + comment.date + '</section>';
 					commentRow += '<section class="col-md-9">' + comment.text + '</section>';
-					commentRow += '<hr><section class="col-md-0">' + '<button type="button" class="btn btn-primary btn-sm">Delete</button>';
-					commentRow += '<section class="col-md-3">' + '<button type="button" class="btn btn-primary btn-sm">Report</button>';
-					commentRow += '<section class="col-md-6">' + '<button type="button" class="btn btn-primary btn-sm">Like</button>' + '</section>';
+					commentRow += '<hr><section>' + '<button type="button" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-thumbs-up"> </i> Like</button>  ';
+					commentRow += '<button type="button" class="btn btn-warning btn-sm"><i class="glyphicon glyphicon-exclamation-sign"> </i> Report</button>  ';
+					commentRow += '<button type="button" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-italic"> </i> Edit</button>  ';
+					commentRow += '<button type="button" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"> </i> Delete</button>  '+ '</section>';
 					
-					commentRow += '</section></section></div>';
+					commentRow += '</div>';
 					$('#topicComments').append(commentRow);
 		
 				});
@@ -213,9 +214,10 @@ function addTopicClickHandlers(topics) {
 
 function createSubforumPreviewPanel(subforum) {
 	var ret;
-	var header = '<div class="row"> <section class="panel panel-info col-md-9"><section class="row panel-body"><section> <h4>' + subforum.name + '<section class="col-md-8">' + '<button type="button" class="btn btn-primary btn-sm">Make new subforum</button>' + '</section>' + "</h4>  <h5>" + subforum.description + "</h5><hr>";
+	var header = '<div class="row"> <section class="panel panel-info col-md-9"><section class="row panel-body"><section class="col-md-8"> <h4>'; 
+	header += subforum.name /**/ + "</h4>  <h5>" + subforum.description + "</h5><hr>";
 	ret = header;
-	var row = '<section class="row"> <ul>';
+	var row = '<section> <ul>';
 	topics = subforum.topics;
 	if(topics != undefined) {
 		topics.forEach(function (topic) {
@@ -224,7 +226,9 @@ function createSubforumPreviewPanel(subforum) {
 	}
 	
 	row += "</ul>";
-	ret += row + '</section></section></section></section>';
+	ret += row + '</section></section> <section class="col-md-2">';
+	ret += '<button type="button" class="btn btn-primary"> <i class="glyphicon glyphicon-plus"> </i> Add topic</button>';
+	ret += '<button type="button" class="btn btn-danger"> <i class="glyphicon glyphicon-trash"> </i> Delete</button></section></section></section>';
 	
 	return ret;
 }
