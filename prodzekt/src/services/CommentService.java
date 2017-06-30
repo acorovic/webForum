@@ -6,6 +6,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -14,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import utils.Config.Role;
 import beans.Comment;
 import beans.Subforum;
 import beans.Topic;
@@ -58,6 +60,36 @@ public class CommentService {
 		}
 		
 		return "Error!";
+		
+	}
+	
+	@DELETE
+	@Path("/{topicId}/{commentId}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String deleteComment(@PathParam("topicId") int topicId, @PathParam("commentId") int commentId) {
+		ArrayList<Subforum> subforums = (ArrayList<Subforum>) db.getSubforums();
+		
+		HttpSession session = request.getSession();
+		
+		User user = (User) session.getAttribute("user");
+		
+		if(user != null) {
+			if(user.getRole() == Role.ADMIN || user.getRole() == Role.MODERATOR) {
+				for(Subforum subforum : subforums) {
+					for(Topic topic : subforum.getTopics()) {
+						if(topic.getTopicId() == topicId) {
+							topic.deleteComment(commentId);
+							
+							db.saveDatabase();
+							
+							return "Comment deleted!";
+						}
+					}
+				}
+			}
+		}
+		
+		return "Must be logged in to delete comment!";
 		
 	}
 	

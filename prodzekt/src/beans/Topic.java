@@ -40,6 +40,15 @@ public class Topic implements Serializable{
 		this.comments = new ArrayList<Comment>();
 	}
 	
+	public void deleteComment(int commentId) {
+		for(Comment comment : this.comments) {
+			if(comment.getCommentId() == commentId) {
+				this.comments.remove(comment);
+				break;
+			}
+		}
+	}
+	
 	public void addComent(Comment com) {
 		comments.add(com);
 	}

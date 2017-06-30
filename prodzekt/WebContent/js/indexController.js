@@ -285,10 +285,21 @@ function addTopicClickHandlers(topics, subforumId) {
 					commentRow += '<button type="button" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-thumbs-down"> </i> Dislike</button>  ';
 					commentRow += '<button type="button" class="btn btn-warning btn-sm"><i class="glyphicon glyphicon-exclamation-sign"> </i> Report</button>  ';
 					commentRow += '<button type="button" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-italic"> </i> Edit</button>  ';
-					commentRow += '<button type="button" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"> </i> Delete</button>  '+ '</section>';
+					commentRow += '<button type="button" id="commentDelete' + comment.commentId + '" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"> </i> Delete</button>  '+ '</section>';
 					
 					commentRow += '</div>';
 					$('#topicComments').append(commentRow);
+					
+					//Setup comment buttons
+					$('#commentDelete' + comment.commentId).click(function () {
+						$.ajax({
+							method: 'DELETE',
+							url: baseUrl + '/comments/' +  topic.topicId + '/' + comment.commentId,
+						}).then(function (message) {
+							alert(message);
+							refresh();
+						});
+					});
 		
 				});
 			}
