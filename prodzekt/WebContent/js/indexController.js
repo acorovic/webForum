@@ -179,9 +179,9 @@ function addTopicClickHandlers(topics) {
 					var commentRow = '<div id="commentId' + comment.commentId + '"> <section class="panel panel-info col-md-12"><section class="row panel-body">';
 					commentRow += '<section class="col-md-3"> <h4>' + comment.author.username + '</h4> ' + comment.date + '</section>';
 					commentRow += '<section class="col-md-9">' + comment.text + '</section>';
-					commentRow += '<hr><section class="col-md-0">' + '<button type="button">Delete</button>';
-					commentRow += '<section class="col-md-3">' + '<button type="button">Report</button>';
-					commentRow += '<section class="col-md-6">' + '<button type="button">Like</button>' + '</section>';
+					commentRow += '<hr><section class="col-md-0">' + '<button type="button" class="btn btn-info btn-sm">Delete</button>';
+					commentRow += '<section class="col-md-3">' + '<button type="button" class="btn btn-info btn-sm">Report</button>';
+					commentRow += '<section class="col-md-6">' + '<button type="button" class="btn btn-info btn-sm">Like</button>' + '</section>';
 					
 					commentRow += '</section></section></div>';
 					$('#topicComments').append(commentRow);
@@ -213,7 +213,7 @@ function addTopicClickHandlers(topics) {
 
 function createSubforumPreviewPanel(subforum) {
 	var ret;
-	var header = '<div class="row"> <section class="panel panel-info col-md-9"><section class="row panel-body"><section> <h4>' + subforum.name + "</h4> <h5>" + subforum.description + "</h5><hr>";
+	var header = '<div class="row"> <section class="panel panel-info col-md-9"><section class="row panel-body"><section> <h4>' + subforum.name + '<section class="col-md-8">' + '<button type="button" class="btn btn-info btn-sm">Make new subforum</button>' + '</section>' + "</h4>  <h5>" + subforum.description + "</h5><hr>";
 	ret = header;
 	var row = '<section class="row"> <ul>';
 	topics = subforum.topics;
