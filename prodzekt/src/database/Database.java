@@ -34,7 +34,7 @@ public class Database {
 		}
 	}
 	
-	public static Database getInstance() {
+	public synchronized static Database getInstance() {
 		if(instance == null) {
 			instance = new Database();
 		}
@@ -42,7 +42,7 @@ public class Database {
 		return instance;
 	}
 	
-	public void saveDatabase() {
+	public synchronized void saveDatabase() {
 		ObjectOutputStream out = null;
 		
 		try {
@@ -64,7 +64,7 @@ public class Database {
 		}
 	}
 	
-	public void loadDatabase() {
+	public synchronized void loadDatabase() {
 		ObjectInputStream in = null;
 		
 		try {
@@ -86,23 +86,23 @@ public class Database {
 		}	
 	}
 	
-	public List<Subforum> getSubforums() {
+	public synchronized List<Subforum> getSubforums() {
 		return application.getSubforums();
 	}
 	
-	public void setSubforums(List<Subforum> subforums) {
+	public synchronized void setSubforums(List<Subforum> subforums) {
 		application.setSubforums(subforums);
 	}
 	
-	public List<User> getUsers() {
+	public synchronized List<User> getUsers() {
 		return application.getUsers();
 	} 
 	
-	public void setUsers(List<User> users) {
+	public synchronized void setUsers(List<User> users) {
 		application.setUsers(users);
 	}
 	
-	public User searchUser(String username) {
+	public synchronized User searchUser(String username) {
 		for(User user : application.getUsers()) {
 			if(user.getUsername().equals(username)) {
 				return user;
@@ -112,12 +112,12 @@ public class Database {
 		return null;
 	}
 	
-	public void addUser(User user) {
+	public synchronized void addUser(User user) {
 		application.getUsers().add(user);
 		saveDatabase();
 	}
 	
-	public boolean changeUserRole(String username, Config.Role role) {
+	public synchronized boolean changeUserRole(String username, Config.Role role) {
 		for(User user : application.getUsers()) {
 			if(user.getUsername().equals(username)) {
 				user.setRole(role);

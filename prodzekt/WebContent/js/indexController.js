@@ -7,7 +7,7 @@ $(document).ready(function () {
 
 	checkLoggedInStatus();
 
-	loadSubforums();
+	
 	
 	
 	//forms
@@ -39,6 +39,8 @@ $(document).ready(function () {
 	$('#logout').click(function () {
 		logoutUser();
 	});
+	
+	loadSubforums();
 	
 });
 
@@ -166,12 +168,40 @@ function loadSubforums() {
 function addTopicClickHandlers(topics) {
 	topics.forEach(function(topic) {
 		$('#topicClick' + topic.topicId).click(function (){
-			$('#topicName').innerHTML = "";
-			$('#topicComments').innerHTML = "";
+			$('#topicName').html("");
+			$('#topicComments').html("");
 			
 			var row = '<h4 class="modal-title">' + topic.name + '</h4>';
 			
 			$('#topicName').append(row);
+			if(topic.comments != undefined) {
+				topic.comments.forEach(function (comment) {
+					var commentRow = '<div id="commentId' + comment.commentId + '"> <section class="panel panel-info col-md-12"><section class="row panel-body">';
+					commentRow += '<section class="col-md-3"> <h4>' + comment.author.username + '</h4> ' + comment.date + '</section>';
+					commentRow += '<section class="col-md-9">' + comment.text + '</section>';
+					
+					commentRow += '</section></section></div>';
+					$('#topicComments').append(commentRow);
+		
+				});
+			}
+			
+			var addCommentFormId = 'commentForm';
+			$('#' + addCommentFormId).submit(function (e){
+				e.preventDefault();
+				var commentContent = $('#commentContent').val();
+				if(commentContent == "") {
+					alert("Empty comment!");
+				} else {
+					$.ajax({
+						method: 'POST',
+						url: baseUrl + '/comments/' + topic.topicId,
+						data: $('#' + addCommentFormId).serialize()
+					}).then(function (message) {
+						alert(message);
+					});
+				}
+			});
 			
 			$('#topicModal').modal('show');
 		});

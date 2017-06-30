@@ -40,6 +40,10 @@ public class Topic implements Serializable{
 		this.comments = new ArrayList<Comment>();
 	}
 	
+	public void addComent(Comment com) {
+		comments.add(com);
+	}
+	
 	public int getTopicId() {
 		return this.topicId;
 	}

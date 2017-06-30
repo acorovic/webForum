@@ -19,6 +19,8 @@ public class Comment implements Serializable{
 	
 	private Topic parentTopic;
 	
+	private int commentId;
+	
 	public Comment(User author, String text, Topic parentTopic, Comment parentComment) {
 		super();
 		this.author = author;
@@ -32,6 +34,8 @@ public class Comment implements Serializable{
 		this.modified = false;
 		
 		this.childComments = new ArrayList<Comment>();
+		
+		this.commentId = hashCode();
 	}
 	
 	public void like() {

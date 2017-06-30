@@ -19,9 +19,13 @@ public class WebApplication implements Serializable {
 		this.subforums = new ArrayList<Subforum>();
 		
 		loadTestData();
+		Comment com1 = new Comment(users.get(0), "ne valja", null, null);
+		(subforums.get(0).getTopics()).get(0).addComent(com1);
+		
+		
 	}
 	
-	private void loadTestData() {
+	private synchronized void loadTestData() {
 		User user1 = new User("user1", "user1", "name", "surname", "email", "phoneNumber");
 		User admin = new User("admin", "admin", "name", "surname", "email", "phoneNumber");
 		
@@ -35,26 +39,26 @@ public class WebApplication implements Serializable {
 		Topic top1 = new Topic("pasulj", admin, "kako napraviti", sub1.getName());
 		Topic top2 = new Topic("riza", admin, "ne valja", sub1.getName());
 		
+		
 		sub1.addTopic(top1);
 		sub1.addTopic(top2);
 		
-		subforums.add(sub1);
-		subforums.add(sub2);
-		
+		this.subforums.add(sub1);
+		this.subforums.add(sub2);
 		
 	}
 	
 	
-	public List<User> getUsers() {
-		return users;
+	public synchronized List<User> getUsers() {
+		return this.users;
 	}
-	public void setUsers(List<User> users) {
+	public synchronized void setUsers(List<User> users) {
 		this.users = users;
 	}
-	public List<Subforum> getSubforums() {
-		return subforums;
+	public synchronized List<Subforum> getSubforums() {
+		return this.subforums;
 	}
-	public void setSubforums(List<Subforum> subforums) {
+	public synchronized void setSubforums(List<Subforum> subforums) {
 		this.subforums = subforums;
 	}
 	
