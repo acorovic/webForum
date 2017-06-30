@@ -164,7 +164,7 @@ function loadSubforums() {
 				
 				$('#subforumsTopicsPreview').append(subforumPreviewPanel);
 				
-				addTopicClickHandlers(subforum.topics);
+				addTopicClickHandlers(subforum.topics, subforum.subforumId);
 				
 				$('#addTopic' + subforum.subforumId).click(function () {
 					$('#createTopicModal').modal('show');
@@ -200,15 +200,31 @@ function loadSubforums() {
 	});
 }
 
-function addTopicClickHandlers(topics) {
+function addTopicClickHandlers(topics, subforumId) {
 	topics.forEach(function(topic) {
 		$('#topicClick' + topic.topicId).click(function (){
 			$('#topicName').html("");
 			$('#topicComments').html("");
 			
-			var row = '<h4 class="modal-title">' + topic.name + '</h4>';
-			
+			var row = '<h4 class="modal-title" style="display:inline-block;">' + topic.name + '</h4>';
+			row += '<button type="button" id="deleteTopic' + topic.topicId + '"class="btn btn-danger" style="float:right"><i class="glyphicon glyphicon-trash"> </i> Delete </button>  ';
+			row += '<button type="button" id="reportTopic' + topic.topicId + '"class="btn btn-warning" style="float:right"><i class="glyphicon glyphicon-exclamation-sign"> </i> Report </button>  ';
 			$('#topicName').append(row);
+			
+			// Topic button actions setup
+			
+			$('#deleteTopic' + topic.topicId).click(function (){
+				$.ajax({
+					method: 'DELETE',
+					url: baseUrl + '/topics/' + subforumId + '/' +  topic.topicId,
+				}).then(function (message) {
+					alert(message);
+					refresh();
+				});
+			});
+			
+			
+			
 			if(topic.comments != undefined) {
 				topic.comments.forEach(function (comment) {
 					var commentRow = '<div id="commentId' + comment.commentId + '"> <section class="panel panel-info col-md-12"><section class="row panel-body">';
@@ -225,6 +241,8 @@ function addTopicClickHandlers(topics) {
 				});
 			}
 			
+			
+			// Comment form setup
 			var addCommentFormId = 'commentForm';
 			$('#' + addCommentFormId).submit(function (e){
 				e.preventDefault();
