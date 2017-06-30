@@ -140,14 +140,54 @@
 	      </div>
 		</div>
 
-		<div class="col-sm-offset-6 col-sm-6">
-			<button type="submit" id="sendMessageButton" class="btn btn-primary text-right" data-toggle="modal" data-target="#sendMessageModal">Send message</button>
-		</div>
+		
 
     </div>
-    <div class="row">
+   
+  </div>
+  
+  <div class="container col-md-3" id="userPanel">	
+	<div class="row">
+		<div class="row"> 
+			<section class="panel panel-info col-md-10">
+				<section class="row panel-body">
+					<section class="col-md-12"> 
+						<h3> Liked topics! </h3>
+						<hl>
+						<ul id="listOfLikedTopics">
+						
+						</ul>
+					</section>
+				</section>
+			</section>
+		</div>
+		<div class="row"> 
+			<section class="panel panel-info col-md-10">
+				<section class="row panel-body">
+					<section class="col-md-12"> 
+						<h3> Disliked topics! </h3>
+						<hl>
+						<ul id="listOfDislikedTopics">
+						
+						</ul>
+					</section>
+				</section>
+			</section>
+		</div>
+		
+	</div>
+  </div>
+  
+   <div class="container col-md-1 ">	
+	<div class="row">
+		<div class="col-sm-2">
+			<button type="submit" id="sendMessageButton" class="btn btn-primary text-right" data-toggle="modal" data-target="#sendMessageModal">Send message</button>
+		</div>
+	</div>
+	
+	<div class="row">
     	<br>
-	    <div class="col-sm-offset-6 col-sm-6">
+	    <div class="col-sm-2">
 			<button type="submit" id="changeUserRoleButton" class="btn btn-primary text-right" data-toggle="modal" data-target="#changeUserRoleModal">Change user role</button>
 		</div>
 	</div>

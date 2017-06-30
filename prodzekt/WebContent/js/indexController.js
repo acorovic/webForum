@@ -3,11 +3,10 @@ var baseUrl = "http://localhost:8080/prodzekt/rest";
 $(document).ready(function () {
 	$('#navbarLoggedIn').hide();
 	$('#adminActionsPanel').hide();
+	$('#userPanel').hide();
 
 	checkLoggedInStatus();
 
-	
-	
 	
 	//forms
 	//login form
@@ -93,6 +92,9 @@ function checkLoggedInStatus() {
 			$('#navbarRegister').hide();
 			$('#registerUser').hide();
 			$('#sendMessageButton').show();
+			$('#userPanel').show();
+			loadLikedTopics(user);
+			loadDislikedTopics(user);
 			if(user.role != "ADMIN") {
 				$('#changeUserRoleButton').hide();
 				userRole = "ADMIN";
@@ -105,6 +107,30 @@ function checkLoggedInStatus() {
 			$('#changeUserRoleButton').hide();
 		}
 	});
+}
+
+function loadLikedTopics(user) {
+	if(user.likedTopics != undefined) {
+		$('#listOfLikedTopics').html("");
+		var likedTopics = user.likedTopics;
+		
+		for(key in likedTopics) {
+			$('#listOfLikedTopics').append("<li>"  + likedTopics[key] + "</li>");
+		}
+		
+	}
+}
+
+function loadDislikedTopics(user) {
+	if(user.likedTopics != undefined) {
+		$('#listOfDislikedTopics').html("");
+		var dislikedTopics = user.dislikedTopics;
+		
+		for(key in dislikedTopics) {
+			$('#listOfDislikedTopics').append("<li>"  + dislikedTopics[key] + "</li>");
+		}
+		
+	}
 }
 
 function logoutUser() {
@@ -209,7 +235,13 @@ function addTopicClickHandlers(topics, subforumId) {
 			var row = '<h4 class="modal-title" style="display:inline-block;">' + topic.name + '</h4>';
 			row += '<button type="button" id="deleteTopic' + topic.topicId + '"class="btn btn-danger" style="float:right"><i class="glyphicon glyphicon-trash"> </i> Delete </button>  ';
 			row += '<button type="button" id="reportTopic' + topic.topicId + '"class="btn btn-warning" style="float:right"><i class="glyphicon glyphicon-exclamation-sign"> </i> Report </button>  ';
+			row += '<button type="button" id="dislikeTopic' + topic.topicId + '" class="btn btn-danger" style="float:right"><i class="glyphicon glyphicon-thumbs-down"> </i> Dislike</button>  ';
+			row += '<button type="button" id="likeTopic' + topic.topicId + '" class="btn btn-primary" style="float:right"><i class="glyphicon glyphicon-thumbs-up"> </i> Like</button>  ';
 			$('#topicName').append(row);
+			
+			var counters = "<p>Topic likes: " + topic.likes + "</p>";
+			counters += "<p> Topic dislikes: " + topic.dislikes + "</p>";
+			$('#topicName').append(counters);
 			
 			// Topic button actions setup
 			
@@ -223,6 +255,25 @@ function addTopicClickHandlers(topics, subforumId) {
 				});
 			});
 			
+			$('#likeTopic' + topic.topicId).click(function (){
+				$.ajax({
+					method: 'PUT',
+					url: baseUrl + '/topics/like/' + subforumId + '/' +  topic.topicId,
+				}).then(function (message) {
+					alert(message);
+					refresh();
+				});
+			});
+			
+			$('#dislikeTopic' + topic.topicId).click(function (){
+				$.ajax({
+					method: 'PUT',
+					url: baseUrl + '/topics/dislike/' + subforumId + '/' +  topic.topicId,
+				}).then(function (message) {
+					alert(message);
+					refresh();
+				});
+			});
 			
 			
 			if(topic.comments != undefined) {
@@ -231,6 +282,7 @@ function addTopicClickHandlers(topics, subforumId) {
 					commentRow += '<section class="col-md-3"> <h4>' + comment.author.username + '</h4> ' + comment.date + '</section>';
 					commentRow += '<section class="col-md-9">' + comment.text + '</section>';
 					commentRow += '<hr><section>' + '<button type="button" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-thumbs-up"> </i> Like</button>  ';
+					commentRow += '<button type="button" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-thumbs-down"> </i> Dislike</button>  ';
 					commentRow += '<button type="button" class="btn btn-warning btn-sm"><i class="glyphicon glyphicon-exclamation-sign"> </i> Report</button>  ';
 					commentRow += '<button type="button" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-italic"> </i> Edit</button>  ';
 					commentRow += '<button type="button" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"> </i> Delete</button>  '+ '</section>';

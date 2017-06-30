@@ -42,7 +42,7 @@ public class CommentService {
 		User user = (User) session.getAttribute("user");
 		
 		if(user == null) {
-			return "Error";
+			return "Must be logged in to comment topic!";
 		}
 		
 		for(Subforum subforum : subforums) {

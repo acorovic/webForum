@@ -7,11 +7,13 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
 
 import utils.Config.Role;
 import beans.Subforum;
@@ -87,9 +89,76 @@ public class TopicService {
 				return "Must be admin or moderator to delete topic";
 			}
 		}
-		
-		
+	
 		return "Must be logged in to delete topic!";
+	}
+	
+	@PUT
+	@Path("/like/{subforumId}/{topicId}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String likeTopic(@PathParam("subforumId") int subforumId, @PathParam("topicId") int topicId) {
+		HttpSession session = request.getSession();
+		
+		User user = (User) session.getAttribute("user");
+		
+		if(user != null) {
+			
+			for(Subforum subforum : db.getSubforums()) {
+				if(subforum.getSubforumId() == subforumId) {
+					for(Topic topic : subforum.getTopics()) {
+						if(topic.getTopicId() == topicId) {
+							if( !user.getLikedTopics().containsKey(topicId)) {
+								topic.like();
+								user.addLike(topicId, topic.getName());
+								
+								db.saveDatabase();
+								
+								return "Liked!";
+							} else {
+								return "Topic already liked!";
+							}
+						}
+					}
+				}
+			}
+		
+		}
+		
+		return "Must be logged in to like topic!";
+	}
+	
+	@PUT
+	@Path("/dislike/{subforumId}/{topicId}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String dislikeTopic(@PathParam("subforumId") int subforumId, @PathParam("topicId") int topicId) {
+		HttpSession session = request.getSession();
+		
+		User user = (User) session.getAttribute("user");
+		
+		if(user != null) {
+			
+			for(Subforum subforum : db.getSubforums()) {
+				if(subforum.getSubforumId() == subforumId) {
+					for(Topic topic : subforum.getTopics()) {
+						if(topic.getTopicId() == topicId) {
+							if( !user.getDislikedTopics().containsKey(topicId)) {
+								topic.dislike();
+								user.addDislike(topicId, topic.getName());
+								
+								db.saveDatabase();
+								
+								return "Dislked!";
+							} else {
+								return "Topic already disliked!";
+							}
+						}
+					}
+				}
+			}
+		
+		}
+		
+		return "Must be logged in to dislike topic!";
 	}
 	
 }

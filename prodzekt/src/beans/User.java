@@ -3,6 +3,7 @@ package beans;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import utils.Config.Role;
@@ -23,6 +24,9 @@ public class User implements Serializable {
 	private List<Topic> savedTopics;
 	private List<Comment> savedComments;
 	private List<Message> receivedMessages;
+	
+	private HashMap<Integer, String> likedTopics;
+	private HashMap<Integer, String> dislikedTopics;
 
 	public User(String username, String password, String name, String surname, String email, String phoneNumber) {
 		super();
@@ -41,8 +45,41 @@ public class User implements Serializable {
 		this.savedComments = new ArrayList<Comment>();
 		this.receivedMessages = new ArrayList<Message>();
 		
+		this.likedTopics = new HashMap<Integer, String>();	
+		this.dislikedTopics = new HashMap<Integer, String>();	
 	}
 	
+	public void addDislike(int id, String name) {
+		this.dislikedTopics.put(id, name);
+	}
+	
+
+	public HashMap<Integer, String> getDislikedTopics() {
+		return dislikedTopics;
+	}
+
+
+
+	public void setDislikedTopics(HashMap<Integer, String> dislikedTopics) {
+		this.dislikedTopics = dislikedTopics;
+	}
+
+
+
+	public void addLike(int id, String name) {
+		this.likedTopics.put(id, name);
+	}
+
+
+	public HashMap<Integer, String> getLikedTopics() {
+		return likedTopics;
+	}
+
+	public void setLikedTopics(HashMap<Integer, String> likedTopics) {
+		this.likedTopics = likedTopics;
+	}
+
+
 	public void addMessage(Message message) {
 		this.receivedMessages.add(message);
 	}
