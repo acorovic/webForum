@@ -166,7 +166,36 @@ function loadSubforums() {
 				
 				addTopicClickHandlers(subforum.topics);
 				
+				$('#addTopic' + subforum.subforumId).click(function () {
+					$('#createTopicModal').modal('show');
+					$('#addTopicModalButton').click(function (e) {
+						e.preventDefault();
+						$.ajax({
+							url: baseUrl + '/topics/' + subforum.subforumId,
+							method: 'POST',
+							data: $('#createTopicForm').serialize()
+						}).then(function (message) {
+							alert(message);
+							refresh();
+					});
+					
+			
+				});
+				
+				$('#removeSubforum' + subforum.subforumId).click(function (){
+					$.ajax({
+						url: baseUrl + '/subforums/' + subforum.subforumId,
+						method: 'DELETE'
+					}).then(function (message) {
+						alert(message);
+						refresh();
+					});
+				});
+				
+				
+				
 			});
+		});
 		}
 	});
 }
@@ -233,8 +262,8 @@ function createSubforumPreviewPanel(subforum) {
 	
 	row += "</ul>";
 	ret += row + '</section></section> <section class="col-md-2">';
-	ret += '<button type="button" class="btn btn-primary btn-sm"> <i class="glyphicon glyphicon-plus"> </i> Add topic</button>';
-	ret += '<button type="button" class="btn btn-danger btn-sm"> <i class="glyphicon glyphicon-trash"> </i> Delete</button></section></section></section>';
+	ret += '<button type="button" class="btn btn-primary btn-sm" id="addTopic' + subforum.subforumId + '"> <i class="glyphicon glyphicon-plus"> </i> Add topic</button>';
+	ret += '<button type="button" class="btn btn-danger btn-sm" id="removeSubforum' + subforum.subforumId + '"> <i class="glyphicon glyphicon-trash"> </i> Delete</button></section></section></section>';
 	
 	return ret;
 }

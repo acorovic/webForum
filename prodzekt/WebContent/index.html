@@ -282,14 +282,14 @@
 						<div class="form-group">
 							<label for="subforumDescription" class="col-sm-2 control-label">Subforum description:</label>
 							<div class="col-sm-10">
-								<textarea class="form-control inputstl" rows="3" name="subforumDescription" placeholder="Subforum description here" name="content" form="createSubforumForm"></textarea>
+								<textarea class="form-control inputstl" rows="3" name="subforumDescription" placeholder="Subforum description here"  form="createSubforumForm"></textarea>
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label for="subforumRules" class="col-sm-2 control-label">Subforum rules:</label>
 							<div class="col-sm-10">
-								<textarea class="form-control inputstl" rows="6" name="subforumRules" placeholder="Subforum rules here" name="content" form="createSubforumForm"></textarea>
+								<textarea class="form-control inputstl" rows="6" name="subforumRules" placeholder="Subforum rules here"  form="createSubforumForm"></textarea>
 							</div>
 						</div>
 
@@ -297,6 +297,43 @@
 						<div class="form-group">
 							<div class="col-sm-offset-2 col-sm-10">
 								<button type="submit" class="btn btn-primary text-right">Add</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- add topic modal -->
+	<div id="createTopicModal" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Create topic</h4>
+				</div>
+				<div class="modal-body">
+					<form id="createTopicForm" class="form-horizontal" action="/prodzekt/rest/topics" method="POST" role="form">
+
+						<div class="form-group">
+							<label for="topicName" class="col-sm-2 control-label">Topic name:</label>
+							<div class="col-sm-10">
+								<input name="topicName" type="text" class="form-control" id="topicName" placeholder="Enter topic name">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="subforumDescription" class="col-sm-2 control-label">Topic content:</label>
+							<div class="col-sm-10">
+								<textarea class="form-control inputstl" rows="3" name="topicContent" placeholder="Topic content here" form="createTopicForm"></textarea>
+							</div>
+						</div>
+						
+
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<button type="submit" id="addTopicModalButton" class="btn btn-primary text-right">Add</button>
 							</div>
 						</div>
 					</form>
