@@ -43,7 +43,7 @@
           	
           	<div id="navbar" class="collapse navbar-collapse">
           		<ul class="nav navbar-nav">
-          			<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"]>Subforums</a>
+          			<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Subforums</a>
           				<ul class="dropdown-menu" id="subforums" role="menu">
           					
           					
@@ -59,17 +59,19 @@
           				</a>
           				
           				<ul class="dropdown-menu" role="menu">
-          					<li><a href="" data-toggle="modal" data-target="#profilePage">Profile</a></li>
-          					<li><a href="" data-toggle="modal" data-target="#showInbox">Inbox &nbsp;
+          					<li><a href="" data-toggle="modal" data-target="#profilePage"><i class="glyphicon glyphicon-user"> </i> Profile</a></li>
+          					<li><a href="" data-toggle="modal" data-target="#showInbox"><i class="glyphicon glyphicon-envelope"> </i> Inbox &nbsp;
           						<span id="receivedMessages" class="badge">0</span>
-          					</a></li>
+          						</a></li>
+          					<li id="reportInbox"><a href="" data-toggle="modal" data-target="#showReports"><i class="glyphicon glyphicon-flag"> </i> Reports &nbsp;
+          						<span id="receivedReports" class="badge">0</span>
+          						</a></li>
           					<li class="divider"></li>
-          					<li><a id="logout" href="#">Logout</a></li>
-          					
+          					<li><a id="logout" href="#"><i class="glyphicon glyphicon-log-out"> </i> Logout</a></li>
           				</ul>
           				</li>
           				
-          			<li id="navbarLogin"><a href="" data-toggle="modal" data-target="#loginUser">Login</a></li>
+          			<li id="navbarLogin"><a href="" data-toggle="modal" data-target="#loginUser"><i class="glyphicon glyphicon-log-in"> </i> Login</a></li>
           			<!--  <li id="navbarRegister"><a href="" data-toggle="modal" data-target="#registerUser">Register</a> -->
           		</ul>
           	</div>
@@ -153,7 +155,7 @@
 				<section class="row panel-body">
 					<section class="col-md-12"> 
 						<h3> Liked topics! </h3>
-						<hl>
+						
 						<ul id="listOfLikedTopics">
 						
 						</ul>
@@ -166,7 +168,7 @@
 				<section class="row panel-body">
 					<section class="col-md-12"> 
 						<h3> Disliked topics! </h3>
-						<hl>
+						
 						<ul id="listOfDislikedTopics">
 						
 						</ul>
@@ -275,7 +277,7 @@
 					<h4 class="modal-title">Send message</h4>
 				</div>
 				<div class="modal-body">
-					<form id="sendMessageForm" class="form-horizontal" action="/prodzekt/rest/messages/sendMessage" method="POST" role="form">
+					<form id="sendMessageForm" class="form-horizontal" action="/prodzekt/rest/messages" method="POST" role="form">
 
 						<div class="form-group">
 							<label for="username" class="col-sm-2 control-label">Send message to</label>
@@ -398,6 +400,20 @@
 		</div>
 	</div>
 
+	<!-- show report modal -->
+	<div id="showReports" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Reports</h4>
+				</div>
+				<div class="modal-body" id="inboxReports">
+				 </div>
+			</div>
+		</div>
+	</div>
+
 	<!--Change user role-->
 	<div id="changeUserRoleModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
@@ -439,7 +455,35 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- report modal -->
+	<div id="reportModal" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Send report</h4>
+				</div>
+				<div class="modal-body">
+					<form id="reportForm" class="form-horizontal" method="POST" role="form">
 
+						<div class="form-group">
+							<label for="reportText" class="col-sm-2 control-label">Report text:</label>
+							<div class="col-sm-10">
+								<input name="content" type="text" class="form-control" id="reportText" placeholder="Enter report text">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<button id="addReportModalButton" type="submit" class="btn btn-danger text-right">Send report</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </body>
 </html>

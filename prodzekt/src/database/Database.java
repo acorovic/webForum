@@ -11,7 +11,10 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 
 import utils.Config;
+import beans.Comment;
+import beans.Report;
 import beans.Subforum;
+import beans.Topic;
 import beans.User;
 import beans.WebApplication;
 
@@ -128,6 +131,69 @@ public class Database {
 		return false;
 	}
 	
+	public synchronized List<Report> getReports() {
+		return application.getReports();
+	}
 	
+	public synchronized void setReports(List<Report> reports) {
+		application.setReports(reports);
+	}
 	
+	public synchronized void addReport(Report report) {
+		application.getReports().add(report);
+		saveDatabase();
+	}
+	
+	public synchronized Report searchReport(int id) {
+		for(Report report : application.getReports()) {
+			if(report.getId()==id) {
+				return report;
+			}
+		}
+		
+		return null;
+	}
+	
+	public synchronized Subforum searchSubforum(String name) {
+		for(Subforum subforum : application.getSubforums()) {
+			if(subforum.getName().equals(name)) {
+				return subforum;
+			}
+		}
+		
+		return null;
+	}
+	
+	public synchronized Subforum searchSubforumById(int id) {
+		for(Subforum subforum : application.getSubforums()) {
+			if(subforum.getSubforumId()==id) {
+				return subforum;
+			}
+		}	
+		return null;
+	}
+	
+	public synchronized Topic searchTopicById(int id){
+		for(Subforum subforum : application.getSubforums()) {
+			for(Topic topic:subforum.getTopics()){
+				if(topic.getTopicId()==id) {
+					return topic;
+				}
+			}
+		}	
+		return null;
+	}
+	
+	public synchronized Comment searchCommentById(int id){
+		for(Subforum subforum : application.getSubforums()) {
+			for(Topic topic:subforum.getTopics()){
+				for(Comment comment:topic.getComments()){
+					if(comment.getCommentId()==id) {
+						return comment;
+					}
+				}
+			}
+		}	
+		return null;
+	}
 }

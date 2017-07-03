@@ -5,9 +5,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @SuppressWarnings("serial")
 public class Topic implements Serializable{
 	private String name;
+	@JsonIgnore
 	private User author;
 	private String type;
 	private String content;
@@ -78,10 +82,12 @@ public class Topic implements Serializable{
 		this.name = name;
 	}
 
+	@JsonIgnore
 	public User getAuthor() {
 		return author;
 	}
 
+	@JsonProperty
 	public void setAuthor(User author) {
 		this.author = author;
 	}

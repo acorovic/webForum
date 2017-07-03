@@ -1,2 +1,4 @@
-/services
-/beans
+/beans/
+/database/
+/services/
+/utils/

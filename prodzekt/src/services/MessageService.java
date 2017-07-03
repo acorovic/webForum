@@ -28,7 +28,6 @@ public class MessageService {
 	Database db = Database.getInstance();
 	
 	@POST
-	@Path("/sendMessage")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String sendMessage(@FormParam("username") String receiverId, @FormParam("content") String content) {
 		HttpSession session = request.getSession();
@@ -53,7 +52,6 @@ public class MessageService {
 	}
 	
 	@GET
-	@Path("/getMessages")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Message> getMessages() {
 		HttpSession session = request.getSession();

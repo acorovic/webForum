@@ -1,9 +1,10 @@
 package beans;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @SuppressWarnings("serial")
 public class Comment implements Serializable{
@@ -14,10 +15,12 @@ public class Comment implements Serializable{
 	private int dislikes;
 	private boolean modified;
 	
+	@JsonIgnore
 	private Comment parentComment;
 	//private List<Comment> childComments;
 	
-	//private Topic parentTopic;
+	@JsonIgnore
+	private Topic parentTopic;
 	
 	private int commentId;
 	
@@ -25,7 +28,7 @@ public class Comment implements Serializable{
 		super();
 		this.author = author;
 		this.text = text;
-		//this.parentTopic = parentTopic;
+		this.parentTopic = parentTopic;
 		this.parentComment = parentComment;
 		
 		this.date = (new Date()).toString();
@@ -102,10 +105,12 @@ public class Comment implements Serializable{
 		this.modified = modified;
 	}
 
+	@JsonIgnore
 	public Comment getParentComment() {
 		return parentComment;
 	}
 
+	@JsonProperty
 	public void setParentComment(Comment parentComment) {
 		this.parentComment = parentComment;
 	}
@@ -117,15 +122,17 @@ public class Comment implements Serializable{
 	public void setChildComments(List<Comment> childComments) {
 		this.childComments = childComments;
 	}
-
+*/	
+	@JsonIgnore
 	public Topic getParentTopic() {
 		return parentTopic;
 	}
-
+	
+	@JsonProperty
 	public void setParentTopic(Topic parentTopic) {
 		this.parentTopic = parentTopic;
 	}
-	*/
+
 	@Override
 	public String toString() {
 		return "Comment [author=" + author + ", date=" + date + ", text=" + text + ", likes=" + likes + ", dislikes="

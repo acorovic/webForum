@@ -1,6 +1,5 @@
 package services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -33,7 +32,6 @@ public class SubforumService {
 	Database db = Database.getInstance();
 	
 	@GET
-	@Path("/getSubforums")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Subforum> getSubforums() {
 		return db.getSubforums();
