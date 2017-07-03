@@ -154,43 +154,40 @@ function loadReports(){
 				reportRow += '<br><br>&nbsp';
 				reportRow += '<button type="button" id="deleteEntity' + report.reportId + '" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"> </i> Delete </button>';
 				reportRow += '<button type="button" id="warnAuthor' + report.reportId + '" class="btn btn-warning btn-sm"><i class="glyphicon glyphicon-exclamation-sign"> </i> Warn author </button>'; 
-				reportRow += '<button type="button" id="informAuthor' + report.reportId + '" class="btn btn-success btn-sm" ><i class="glyphicon glyphicon-share-alt"> </i> Inform report author </button>'; 
-				unprocessedReports++;	
-				
-				$('#deleteEntity' + report.reportId).click(function (){
-			  		$.ajax({
-						method: 'DELETE',
-						url: baseUrl+'/reports/'+report.reportId
-					}).then(function (message) {
-						alert(message);
-						refresh();
-					});
-				});
-				
-				$('#warnAuthor' + report.reportId).click(function (){
-					alert("WARNED");
-			  		/*$.ajax({
-						method: 'DELETE',
-						url: baseUrl+'/reports/'+report.reportId
-					}).then(function (message) {
-						alert(message);
-						refresh();
-					});*/
-				});
-				
-				$('#informAuthor' + report.reportId).click(function (){
-					alert("INFORMED");
-			  		/*$.ajax({
-						method: 'DELETE',
-						url: baseUrl+'/reports/'+report.reportId
-					}).then(function (message) {
-						alert(message);
-						refresh();
-					});*/
-				});
-				
+				reportRow += '<button type="button" id="informAuthor' + report.reportId + '" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-share-alt"> </i> Inform report author </button>'; 
+				unprocessedReports++;		
 			}
-			$('#inboxReports').append(reportRow + '<hr></p>');
+			$('#inboxReports').append(reportRow + '<hr>');
+			
+			$('#deleteEntity' + report.reportId).click(function (){
+		  		$.ajax({
+					method: 'DELETE',
+					url: baseUrl+'/reports/'+report.reportId
+				}).then(function (message) {
+					alert(message);
+					refresh();
+				});
+			});
+			
+			$('#warnAuthor' + report.reportId).click(function (){
+		  		$.ajax({
+					method: 'POST',
+					url: baseUrl+'/reports/'+report.reportId+'/warn'
+				}).then(function (message) {
+					alert(message);
+					refresh();
+				});
+			});
+			
+			$('#informAuthor' + report.reportId).click(function (){
+		  		$.ajax({
+					method: 'POST',
+					url: baseUrl+'/reports/'+report.reportId+'/inform'
+				}).then(function (message) {
+					alert(message);
+					refresh();
+				});
+			});
 		});
 		$('#receivedReports').text(unprocessedReports);
 	});
@@ -220,7 +217,7 @@ function loadMessages() {
 				
 			}
 
-			$('#inboxMessages').append(messageRow + '<hr></p>');
+			$('#inboxMessages').append(messageRow + '<hr>');
 			
 			if(message.seen == false) {
 				$('#seen' + message.messageId).click(function() {

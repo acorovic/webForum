@@ -101,38 +101,36 @@ public class ReportService {
 	public String deleteReportedObject(@PathParam("reportId") int id){
 		
 		HttpSession session = request.getSession();
-		
 		User user = (User) session.getAttribute("user");
-		
 		Report report = db.searchReport(id);
 		
 		if(report.getType()==ObjectClass.SUBFORUM){
 			User responsible = ((Subforum)report.getReportObject()).getResponsibleModerator();
-			String text = "User " + report.getOffended() + "reported your subforum (" + ((Subforum)report.getReportObject()).getName() + "). It is violating forum rules and is being deleted.";
+			String text = "User " + report.getOffended() + " reported your subforum ( " + ((Subforum)report.getReportObject()).getName() + " ). It is violating forum rules and is being deleted.";
 			Message message = new Message(user.getUsername(),responsible.getUsername(),text);
 			responsible.addMessage(message);
 			db.getSubforums().remove(db.searchSubforumById(id));
 			db.saveDatabase();
-			String text1 = "Subforum you reported (" + ((Subforum)report.getReportObject()).getName() + ") was found violating forum rules and was removed. Thank you for your support.";
+			String text1 = "Subforum you reported ( " + ((Subforum)report.getReportObject()).getName() + " ) was found violating forum rules and was removed. Thank you for your support.";
 			Message message1 = new Message(user.getUsername(),report.getOffended(),text1);
 			db.searchUser(report.getOffended()).addMessage(message1);
 			report.setProcessed(true);
-			return "Subforum deleted!";
+			return "Subforum " + ((Subforum)report.getReportObject()).getName() + " deleted!";
 		}else if(report.getType()==ObjectClass.TOPIC){
 			User responsible = ((Topic)report.getReportObject()).getAuthor();
-			String text = "User " + report.getOffended() + "reported your topic (" + ((Topic)report.getReportObject()).getName() + "). It is violating forum rules and is being deleted.";
+			String text = "User " + report.getOffended() + " reported your topic (" + ((Topic)report.getReportObject()).getName() + "). It is violating forum rules and is being deleted.";
 			Message message = new Message(user.getUsername(), responsible.getUsername(), text);
 			responsible.addMessage(message);
-			db.searchSubforum(((Topic)report.getReportObject()).getParentSubforum()).getTopics().remove(((Topic)report.getReportObject()));
+			db.searchSubforumById(Integer.parseInt(((Topic)report.getReportObject()).getParentSubforum())).getTopics().remove(((Topic)report.getReportObject()));
 			db.saveDatabase();
 			String text1 = "Topic you reported (" + ((Topic)report.getReportObject()).getName() + ") was found violating forum rules and was removed. Thank you for your support.";
 			Message message1 = new Message(user.getUsername(),report.getOffended(),text1);
 			db.searchUser(report.getOffended()).addMessage(message1);
 			report.setProcessed(true);
-			return "Topic deleted!";
+			return "Topic " + ((Topic)report.getReportObject()).getName() + " deleted!";
 		}else{
 			User responsible = ((Comment)report.getReportObject()).getAuthor();
-			String text = "User " + report.getOffended() + "reported your comment on topic " + ((Comment)report.getReportObject()).getParentTopic().getName() + ". It is violating forum rules and is being deleted.";
+			String text = "User " + report.getOffended() + " reported your comment on topic " + ((Comment)report.getReportObject()).getParentTopic().getName() + ". It is violating forum rules and is being deleted.";
 			Message message = new Message(user.getUsername(), responsible.getUsername(), text);
 			responsible.addMessage(message);
 			((Comment)report.getReportObject()).getParentTopic().getComments().remove(((Comment)report.getReportObject()));
@@ -143,5 +141,65 @@ public class ReportService {
 			report.setProcessed(true);
 			return "Comment deleted!";
 		}
+	}
+	
+	@POST
+	@Path("/{reportId}/warn")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String warnObjectAuthor(@PathParam("reportId")int id){
+		
+		HttpSession session = request.getSession();	
+		User user = (User) session.getAttribute("user");
+		Report report = db.searchReport(id);
+		String text1;
+		
+		if(report.getType()==ObjectClass.SUBFORUM){
+			System.out.println("SUBFORUM");
+			User toBeWarned = ((Subforum)report.getReportObject()).getResponsibleModerator();
+			String text = "User " + report.getOffended() + " reported your subforum ( " + ((Subforum)report.getReportObject()).getName() + " ). Make sure you are not violating forum rules.";
+			Message message = new Message(user.getUsername(),toBeWarned.getUsername(),text);
+			toBeWarned.addMessage(message);
+			text1 = "Author of subforum you reported ( " + ((Subforum)report.getReportObject()).getName() + " ) was warned about violating forum rules. Thank you for your support.";
+		}else if(report.getType()==ObjectClass.TOPIC){
+			System.out.println("TOPIC");
+			User toBeWarned = ((Topic)report.getReportObject()).getAuthor();
+			String text = "User " + report.getOffended() + " reported your topic ( " + ((Topic)report.getReportObject()).getName() + " ). Make sure you are not violating forum rules.";
+			Message message = new Message(user.getUsername(),toBeWarned.getUsername(),text);
+			toBeWarned.addMessage(message);
+			text1 = "Author of topic you reported ( " + ((Topic)report.getReportObject()).getName() + " ) was warned about violating forum rules. Thank you for your support.";
+		}else{
+			System.out.println("COMMENT");
+			User toBeWarned = ((Comment)report.getReportObject()).getAuthor();
+			String text = "User " + report.getOffended() + " reported your comment on topic " + ((Comment)report.getReportObject()).getParentTopic().getName() + ". Make sure you are not violating forum rules.";
+			Message message = new Message(user.getUsername(),toBeWarned.getUsername(),text);
+			toBeWarned.addMessage(message);
+			text1 = "Author of comment you reported ( Topic : " + ((Comment)report.getReportObject()).getParentTopic().getName() + " ) was warned about violating forum rules. Thank you for your support.";	
+		}
+		Message message1 = new Message(user.getUsername(),report.getOffended(),text1);
+		db.searchUser(report.getOffended()).addMessage(message1);
+		report.setProcessed(true);
+		return "Author warned!";
+	}
+	
+	@POST
+	@Path("/{reportId}/inform")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String informOffended(@PathParam("reportId") int id){
+		
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		Report report = db.searchReport(id);
+		String text;
+		if(report.getType()==ObjectClass.SUBFORUM){
+			text="Subforum you reported ( " + ((Subforum)report.getReportObject()).getName() + " ) is not violating forum rules. Thank you for your support.";
+		}else if(report.getType()==ObjectClass.TOPIC){
+			text="Topic you reported ( " + ((Topic)report.getReportObject()).getName() + " ) is not violating forum rules. Thank you for your support.";
+		}else{
+			text="Comment you reported on topic " + ((Topic)report.getReportObject()).getName() + " is not violating forum rules. Thank you for your support.";
+		}
+		Message message = new Message(user.getUsername(),report.getOffended(),text);
+		db.searchUser(report.getOffended()).addMessage(message);
+		report.setProcessed(true);
+		return "Offended user informed!";
 	}
 }
