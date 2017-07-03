@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 
 
 import utils.Config.Role;
+import beans.Report;
 import beans.Subforum;
 import beans.Topic;
 import beans.User;
@@ -76,6 +77,10 @@ public class TopicService {
 					if(subforum.getSubforumId() == subforumId) {
 						for(Topic topic : subforum.getTopics()) {
 							if(topic.getTopicId() == topicId) {
+								Report report;
+								if((report=db.searchReport(topicId))!=null){
+									db.getReports().remove(report);
+								}
 								subforum.getTopics().remove(topic);
 								db.saveDatabase();
 								
@@ -110,7 +115,9 @@ public class TopicService {
 							if( !user.getLikedTopics().containsKey(topicId)) {
 								topic.like();
 								user.addLike(topicId, topic.getName());
-								
+								if(user.getDislikedTopics().containsKey(topicId)){
+									user.getDislikedTopics().remove(topicId);
+								}
 								db.saveDatabase();
 								
 								return "Liked!";
@@ -144,7 +151,9 @@ public class TopicService {
 							if( !user.getDislikedTopics().containsKey(topicId)) {
 								topic.dislike();
 								user.addDislike(topicId, topic.getName());
-								
+								if(user.getLikedTopics().containsKey(topicId)){
+									user.getLikedTopics().remove(topicId);
+								}
 								db.saveDatabase();
 								
 								return "Dislked!";

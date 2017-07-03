@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 
 import utils.Config.Role;
 import database.Database;
+import beans.Report;
 import beans.Subforum;
 import beans.User;
 
@@ -78,6 +79,10 @@ public class SubforumService {
 			if(user.getRole() == Role.ADMIN || user.getRole() == Role.MODERATOR) {
 				for(Subforum subforum : db.getSubforums()) {
 					if(subforum.getSubforumId() == subforumId) {
+						Report report;
+						if((report=db.searchReport(subforumId))!=null){
+							db.getReports().remove(report);
+						}
 						db.getSubforums().remove(subforum);
 						break;
 					}

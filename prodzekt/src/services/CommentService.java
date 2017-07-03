@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 
 import utils.Config.Role;
 import beans.Comment;
+import beans.Report;
 import beans.Subforum;
 import beans.Topic;
 import beans.User;
@@ -78,6 +79,11 @@ public class CommentService {
 				for(Subforum subforum : subforums) {
 					for(Topic topic : subforum.getTopics()) {
 						if(topic.getTopicId() == topicId) {
+							
+							Report report;
+							if((report=db.searchReport(commentId))!=null){
+								db.getReports().remove(report);
+							}
 							topic.deleteComment(commentId);
 							
 							db.saveDatabase();
