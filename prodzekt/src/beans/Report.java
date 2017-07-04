@@ -20,6 +20,10 @@ public class Report implements Serializable{
 	private boolean processed;
 	private ObjectClass type;
 	
+	public Report() {
+		super();
+	}
+	
 	public Report(String offended, String reportText, Subforum reportObject,int id) {
 		super();
 		this.offended = offended;

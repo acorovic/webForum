@@ -26,6 +26,10 @@ public class Topic implements Serializable{
 	
 	private int topicId;
 	
+	public Topic() {
+		super();
+	}
+	
 	public Topic(String name, User author, String content, String parentSubforum) {
 		super();
 		this.name = name;

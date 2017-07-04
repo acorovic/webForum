@@ -24,6 +24,10 @@ public class Comment implements Serializable{
 	
 	private int commentId;
 	
+	public Comment() {
+		super();
+	}
+	
 	public Comment(User author, String text, Topic parentTopic, Comment parentComment) {
 		super();
 		this.author = author;

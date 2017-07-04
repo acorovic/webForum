@@ -27,6 +27,12 @@ public class User implements Serializable {
 	
 	private HashMap<Integer, String> likedTopics;
 	private HashMap<Integer, String> dislikedTopics;
+	private HashMap<Integer, String> likedComments;
+	private HashMap<Integer, String> dislikedComments;
+	
+	public User() {
+		super();
+	}
 
 	public User(String username, String password, String name, String surname, String email, String phoneNumber) {
 		super();
@@ -47,12 +53,38 @@ public class User implements Serializable {
 		
 		this.likedTopics = new HashMap<Integer, String>();	
 		this.dislikedTopics = new HashMap<Integer, String>();	
+		this.likedComments = new HashMap<Integer, String>();
+		this.dislikedComments = new HashMap<Integer, String>();
 	}
 	
 	public void addDislike(int id, String name) {
 		this.dislikedTopics.put(id, name);
 	}
 	
+	public void addDislikedComment(int id, String name) {
+		this.dislikedComments.put(id, name);
+	}
+	
+	public void addLikedComment(int id, String name) {
+		this.likedComments.put(id, name);
+	}
+	
+
+	public HashMap<Integer, String> getLikedComments() {
+		return likedComments;
+	}
+
+	public void setLikedComments(HashMap<Integer, String> likedComments) {
+		this.likedComments = likedComments;
+	}
+
+	public HashMap<Integer, String> getDislikedComments() {
+		return dislikedComments;
+	}
+
+	public void setDislikedComments(HashMap<Integer, String> dislikedComments) {
+		this.dislikedComments = dislikedComments;
+	}
 
 	public HashMap<Integer, String> getDislikedTopics() {
 		return dislikedTopics;

@@ -19,6 +19,10 @@ public class Subforum implements Serializable {
 	
 	private int subforumId;
 	
+	public Subforum() {
+		super();
+	}
+	
 	public Subforum(String name, String description, String icon, String rules, User responsibleModerator) {
 		super();
 		this.name = name;

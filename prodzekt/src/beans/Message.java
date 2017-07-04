@@ -12,6 +12,9 @@ public class Message implements Serializable{
 	private boolean isReport;
 	private int messageId;
 
+	public Message() {
+		super();
+	}
 	
 	public Message(String sender, String receiver, String content) {
 		super();
