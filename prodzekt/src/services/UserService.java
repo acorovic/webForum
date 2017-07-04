@@ -19,8 +19,10 @@ import javax.ws.rs.core.MediaType;
 
 
 
+
 import utils.Config;
 import beans.Message;
+import beans.Subforum;
 import beans.User;
 import database.Database;
 
@@ -154,6 +156,8 @@ public class UserService {
 			return null;
 		}
 	}
+	
+
 	
 	@GET
 	@Path("/seen/{messageId}")

@@ -392,7 +392,11 @@ function addTopicClickHandlers(topics, subforumId) {
 			if(topic.comments != undefined) {
 				topic.comments.forEach(function (comment) {
 					var commentRow = '<div id="commentId' + comment.commentId + '"> <section class="panel panel-info col-md-12"><section class="row panel-body">';
-					commentRow += '<section class="col-md-3"> <h4>' + comment.author.username + '</h4> ' + comment.date + '</section>';
+					commentRow += '<section class="col-md-3"> <h4>' + comment.author.username + '</h4><br> Created on: <br> ' + comment.date + '<br>';
+					if(comment.modified == true) {
+						commentRow += " Edited on: " + comment.modifiedData;
+					}
+					commentRow += '</section>';
 					commentRow += '<section class="col-md-9">' + comment.text + '</section>';
 					commentRow += '<hr><section>' + '<button type="button" id="commentLike' + comment.commentId +'" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-thumbs-up"> </i> Like</button>  ';
 					commentRow += '<button type="button" id="commentDislike' + comment.commentId + '" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-thumbs-down"> </i> Dislike</button>  ';
@@ -428,6 +432,24 @@ function addTopicClickHandlers(topics, subforumId) {
 								alert(message.responseText);
 							}
 						});
+					});
+					
+					$('#commentEdit' + comment.commentId).click(function (){
+						$('#editCommentContent').val(comment.text);
+						$('#editCommentModal').modal('show');
+
+						$('#editCommentForm').submit(function(e){
+							e.preventDefault();
+							$.ajax({
+								method: 'PUT',
+								url: baseUrl+'/comments/'+ subforumId + '/' + topic.topicId + '/' + comment.commentId,
+								data: $('#editCommentForm').serialize()
+							}).then(function (message) {
+								alert(message);
+								refresh();
+							});
+						});
+						
 					});
 					
 					$('#commentReport' + comment.commentId).click(function (){

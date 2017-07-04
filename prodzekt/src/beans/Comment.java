@@ -1,6 +1,7 @@
 package beans;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,6 +15,8 @@ public class Comment implements Serializable{
 	private int likes;
 	private int dislikes;
 	private boolean modified;
+	
+	private String modifiedData;
 	
 	@JsonIgnore
 	private Comment parentComment;
@@ -35,7 +38,7 @@ public class Comment implements Serializable{
 		this.parentTopic = parentTopic;
 		this.parentComment = parentComment;
 		
-		this.date = (new Date()).toString();
+		this.date = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
 		this.likes = 0;
 		this.dislikes = 0;
 		this.modified = false;
@@ -43,8 +46,19 @@ public class Comment implements Serializable{
 		//this.childComments = new ArrayList<Comment>();
 		
 		this.commentId = hashCode();
+		this.modifiedData = "";
 	}
 	
+	
+	
+	public String getModifiedData() {
+		return modifiedData;
+	}
+
+	public void setModifiedData(String modifiedData) {
+		this.modifiedData = modifiedData;
+	}
+
 	public void setCommentId(int commentId) {
 		this.commentId = commentId;
 	}

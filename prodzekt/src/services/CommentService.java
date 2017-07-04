@@ -1,6 +1,8 @@
 package services;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -174,6 +176,60 @@ public class CommentService {
 		}
 			
 		return "Must be logged in to dislike the comment!";
+	}
+	
+	@PUT
+	@Path("/{subforumId}/{topicId}/{commentId}")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String editComment(@PathParam ("subforumId") int subforumId, @PathParam ("topicId") int topicId,
+			@PathParam ("commentId") int commentId, @FormParam("editCommentContent") String editContent) {
+		
+		HttpSession session = request.getSession();
+		ArrayList<Subforum> subforums = (ArrayList<Subforum>) db.getSubforums();
+		
+		User user = (User) session.getAttribute("user");
+		
+		if(user != null) {
+			for(Subforum subforum : subforums) {
+				if(subforum.getSubforumId() == subforumId) {
+					for(Topic topic : subforum.getTopics()) {
+						if(topic.getTopicId() == topicId) {
+							for(Comment comment : topic.getComments()) {
+								if(comment.getCommentId() == commentId) {
+									if(comment.getText().equals(editContent)) {
+										return "New comment is same as the old one!";
+									}
+									
+									if (subforum.getResponsibleModerator().getUsername().equals(user.getUsername())) {
+										// responsible moderator changed comment
+										comment.setModified(false);
+										comment.setModifiedData("");
+										comment.setText(editContent);
+										db.saveDatabase();
+										return "Comment edited!";
+									} else if(comment.getAuthor().getUsername().equals(user.getUsername())) {
+										// User edited comment
+										comment.setModified(true);
+										comment.setModifiedData(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+										comment.setText(editContent);
+										db.saveDatabase();
+										return "Comment edited!";									
+									} else {
+										return "Must be creator of comment or responsible subforum moderator to edit comment!";
+									}
+																	
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		
+		
+		return "Must be logged in to change the comment";
 	}
 	
 	
