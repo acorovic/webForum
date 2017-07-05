@@ -15,6 +15,10 @@ table table {
     font-size: 16px
 }
 
+.inline-block {
+   display: inline-block;
+}
+
 .likesCount {
     text-decoration: bold;
     text-align: center;

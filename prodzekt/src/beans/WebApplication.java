@@ -38,8 +38,8 @@ public class WebApplication implements Serializable {
 		users.add(admin);
 		users.add(mod1);
 		
-		Subforum sub1 = new Subforum("kuinja", "kuvanje", "nema ikonica", "nista", admin);
-		Subforum sub2 = new Subforum("bicikli", "razni", "newm", "nema", mod1);
+		Subforum sub1 = new Subforum("kuinja", "kuvanje", "", "nista", admin);
+		Subforum sub2 = new Subforum("bicikli", "razni", "", "nema", mod1);
 		
 		Topic top1 = new Topic("pasulj", user1, "kako napraviti", Integer.toString(sub1.getSubforumId()));
 		Topic top2 = new Topic("riza", admin, "ne valja", Integer.toString(sub1.getSubforumId()));

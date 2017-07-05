@@ -38,6 +38,7 @@ public class Subforum implements Serializable {
 		moderators.add(responsibleModerator);
 	}
 	
+	
 	public int getSubforumId() {
 		return this.subforumId;
 	}

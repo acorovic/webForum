@@ -34,7 +34,7 @@ $(document).ready(function () {
 	
 	var createSubforumId = 'createSubforumForm';
 	$('#' + createSubforumId).submit(function (e) {
-		handleForm(e, createSubforumId);
+		addSubforumForm(e, createSubforumId);
 	});
 	
 	/*var reportId = 'reportForm';
@@ -56,6 +56,52 @@ $(document).ready(function () {
 	loadSubforums();
 	
 });
+
+function addSubforumForm(e, createSubforumId) {
+	e.preventDefault();
+	
+	var file = $('#iconUpload')[0].files[0];
+
+    $.ajax({
+        url: baseUrl + "/subforums/icon",
+        type: "POST",
+        contentType: "multipart/form-data",
+        dataType: "json",
+        data: file,
+        processData: false,
+        async: false,
+        complete: function (response) {
+
+            //alert("File uploaded at: "+ response.responseText);
+
+            var form = $('#' + createSubforumId);
+            var input = $('#' + createSubforumId + ' :input');
+
+            var data = {};
+            for (var i = 0; i < input.length; i++) {
+                if (input[i].name) {
+                    if (input[i].type != "file") {
+                        data[input[i].name] = input[i].value;
+                    }
+                }
+            }
+
+            data["icon"] = response.responseText;
+
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                complete: function (data) {
+                		alert(data.responseText);
+                        $('.modal').modal('hide');
+                }
+            });
+
+        }
+    });
+}
 
 
 function performSearch(keyWord) {	
@@ -116,12 +162,7 @@ function performSearch(keyWord) {
 			}		
 		});
 	}
-	
-	
-	
 }
-
-
 
 function changeUserRole() {
 	var user = $('#usernameChangeRole').val();
@@ -336,7 +377,9 @@ function loadSubforums() {
 	}).then(function (subforums){
 		if(subforums != undefined) {
 			subforums.forEach(function (subforum) {
-				var subforumRow = '<li> <a href="#" id="subforum' + subforum.subforumId + '">' + subforum.name + '</a></li>';
+				var subforumRow = '<li>';
+			
+				subforumRow += '<a href="#" id="subforum' + subforum.subforumId + '">' + subforum.name + '</a></li>';
 				
 				$('#subforums').append(subforumRow);
 				
@@ -577,8 +620,12 @@ function addTopicClickHandlers(topics, subforumId) {
 }
 
 function createSubforumPreviewPanel(subforum) {
+	if(subforum.icon == "") {
+         subforum.icon = "test.png";
+    }
+	
 	var ret;
-	var header = '<div class="row"> <section class="panel panel-info col-md-9"><section class="row panel-body"><section class="col-md-8"> <h4>'; 
+	var header = '<div class="row"> <section class="panel panel-info col-md-9"><section class="row panel-body"><section class="col-md-8"><h4><img src="' + subforum.icon + '" alt="" />'; 
 	header += subforum.name + "</h4>  <h5>" + subforum.description + "</h5><hr>";
 	ret = header;
 	var row = '<section> <ul>';

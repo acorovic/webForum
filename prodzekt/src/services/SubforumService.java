@@ -1,7 +1,12 @@
 package services;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +22,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import utils.Config;
 import utils.Config.Role;
 import database.Database;
 import beans.Report;
@@ -132,7 +138,67 @@ public class SubforumService {
 		} else {
 			return returnVal;
 		}
-		
+	}
+	
+	@POST
+    @Path("/icon")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public String uploadIcon(InputStream uploadedInputStream) {
+        String fileLocation = context.getRealPath("") + "\\";
+        String imageId = UUID.randomUUID().toString()  + ".png";
+        
+        fileLocation += imageId;
+        try {
+        	File file = new File(fileLocation);
+        	file.createNewFile();
+            FileOutputStream out = new FileOutputStream(file, false);
+            int read = 0;
+            byte[] bytes = new byte[1024];
+            while ((read = uploadedInputStream.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return imageId;
+    }
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String create(Subforum subforumToAdd) {
+
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+
+		if(user != null) {
+			if(user.getRole().equals(Role.MODERATOR) || user.getRole().equals(Role.ADMIN)) {
+
+				if(!(subforumToAdd.getName().equals("") || subforumToAdd.getDescription().equals("") || subforumToAdd.getRules().equals(""))) {
+					Subforum subforum = new Subforum(subforumToAdd.getName(), 
+							subforumToAdd.getDescription(), 
+							subforumToAdd.getIcon(),
+							subforumToAdd.getRules(),  
+							user);
+
+					db.getSubforums().add(subforum);
+					db.saveDatabase();
+					return "Added a forum " + subforumToAdd.getName();
+				}
+				else {
+					return "Name, description and rules are required fileds!";
+				}
+			}
+			else {
+				return "You do not have permission to create subforum!";
+			}
+
+		}
+		else {
+			return "Must be logged in to add subforum!";
+		}
 	}
 	
 	
