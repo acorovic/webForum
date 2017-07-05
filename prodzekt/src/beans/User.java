@@ -21,14 +21,15 @@ public class User implements Serializable {
 	private Role role;
 	
 	private List<Subforum> followedSubforums;
-	private List<Topic> savedTopics;
-	private List<Comment> savedComments;
 	private List<Message> receivedMessages;
 	
 	private HashMap<Integer, String> likedTopics;
 	private HashMap<Integer, String> dislikedTopics;
 	private HashMap<Integer, String> likedComments;
 	private HashMap<Integer, String> dislikedComments;
+	private HashMap<Integer, String> savedSubforums;
+	private HashMap<Integer, String> savedTopics;
+	private HashMap<Integer, String> savedComments;
 	
 	public User() {
 		super();
@@ -47,14 +48,15 @@ public class User implements Serializable {
 		this.role = Role.USER;
 		
 		this.followedSubforums = new ArrayList<Subforum>();
-		this.savedTopics = new ArrayList<Topic>();
-		this.savedComments = new ArrayList<Comment>();
 		this.receivedMessages = new ArrayList<Message>();
 		
 		this.likedTopics = new HashMap<Integer, String>();	
 		this.dislikedTopics = new HashMap<Integer, String>();	
 		this.likedComments = new HashMap<Integer, String>();
 		this.dislikedComments = new HashMap<Integer, String>();
+		this.savedSubforums = new HashMap<Integer, String>();
+		this.savedComments = new HashMap<Integer, String>();
+		this.savedTopics = new HashMap<Integer, String>();
 	}
 	
 	public void addDislike(int id, String name) {
@@ -69,6 +71,30 @@ public class User implements Serializable {
 		this.likedComments.put(id, name);
 	}
 	
+
+	public HashMap<Integer, String> getSavedSubforums() {
+		return savedSubforums;
+	}
+
+	public void setSavedSubforums(HashMap<Integer, String> savedSubforums) {
+		this.savedSubforums = savedSubforums;
+	}
+
+	public HashMap<Integer, String> getSavedTopics() {
+		return savedTopics;
+	}
+
+	public void setSavedTopics(HashMap<Integer, String> savedTopics) {
+		this.savedTopics = savedTopics;
+	}
+
+	public HashMap<Integer, String> getSavedComments() {
+		return savedComments;
+	}
+
+	public void setSavedComments(HashMap<Integer, String> savedComments) {
+		this.savedComments = savedComments;
+	}
 
 	public HashMap<Integer, String> getLikedComments() {
 		return likedComments;
@@ -134,21 +160,6 @@ public class User implements Serializable {
 		this.followedSubforums = followedSubforums;
 	}
 
-	public List<Topic> getSavedTopics() {
-		return savedTopics;
-	}
-
-	public void setSavedTopics(List<Topic> savedTopics) {
-		this.savedTopics = savedTopics;
-	}
-
-	public List<Comment> getSavedComments() {
-		return savedComments;
-	}
-
-	public void setSavedComments(List<Comment> savedComments) {
-		this.savedComments = savedComments;
-	}
 
 	public String getUsername() {
 		return username;

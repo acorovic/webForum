@@ -217,4 +217,33 @@ public class TopicService {
 		}
 	}
 	
+	@POST
+	@Path("/save/{subforumId}/{topicId}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String saveTopic(@PathParam("subforumId") int subforumId, @PathParam("topicId") int topicId) {
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		
+		if(user != null) {
+			if(user.getSavedTopics().containsKey(topicId)) {
+				return "Already saved topic!";
+			}
+			for(Subforum subforum : db.getSubforums()) {
+				if(subforum.getSubforumId() == subforumId) {
+					for(Topic topic : subforum.getTopics()) {
+						if(topic.getTopicId() == topicId) {
+							user.getSavedTopics().put(topicId,topic.getName());
+							db.saveDatabase();
+
+							return "Topic saved!";
+						}
+					}
+				}
+			}
+		}
+		
+		return "Must be logged in to save the subforum!";
+		
+	}
+	
 }

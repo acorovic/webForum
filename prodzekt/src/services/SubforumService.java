@@ -201,5 +201,30 @@ public class SubforumService {
 		}
 	}
 	
+	@POST
+	@Path("/save/{subforumId}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String saveSubforum(@PathParam("subforumId") int subforumId) {
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		
+		if(user != null) {
+			if(user.getSavedSubforums().containsKey(subforumId)) {
+				return "Already saved subforum!";
+			}
+			for(Subforum subforum : db.getSubforums()) {
+				if(subforum.getSubforumId() == subforumId) {
+					user.getSavedSubforums().put(subforumId, subforum.getName());
+					db.saveDatabase();
+					
+					return "Subforum saved!";
+				}
+			}
+		}
+		
+		return "Must be logged in to save the subforum!";
+		
+	}
+	
 	
 }

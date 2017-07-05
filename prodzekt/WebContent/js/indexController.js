@@ -278,6 +278,9 @@ function checkLoggedInStatus() {
 			loadDislikedTopics(user);
 			loadLikedComments(user);
 			loadDislikedComments(user);
+			loadSavedSubforums(user);
+			loadSavedTopics(user);
+			loadSavedComments(user);
 			if(user.role != "USER"){
 				$('#reportInbox').show();
 			}else{
@@ -298,6 +301,18 @@ function checkLoggedInStatus() {
 	});
 }
 
+function loadSavedSubforums(user) {
+	if(user.savedSubforums != undefined) {
+		$('#listOfSavedSubforums').html("");
+		var savedSubforums = user.savedSubforums;
+		
+		for(key in savedSubforums) {
+			$('#listOfSavedSubforums').append("<li>"  + savedSubforums[key] + "</li>");
+		}	
+	}
+}
+
+
 function loadLikedComments(user) {
 	if(user.likedComments != undefined) {
 		$('#listOfLikedComments').html("");
@@ -308,6 +323,21 @@ function loadLikedComments(user) {
 		}
 		
 	}
+}
+
+function loadSavedTopics(user) {
+	if(user.savedTopics != undefined) {
+		$('#listOfSavedTopics').html("");
+		var savedTopics = user.savedTopics;
+		
+		for(key in savedTopics) {
+			$('#listOfSavedTopics').append("<li>"  + savedTopics[key] + "</li>");
+		}	
+	}
+}
+
+function loadSavedComments(user) {
+	
 }
 
 function loadDislikedComments(user) {
@@ -460,6 +490,17 @@ function loadSubforums() {
 				
 				addTopicClickHandlers(subforum.topics, subforum.subforumId);
 				
+				$('#saveSubforum' + subforum.subforumId).click(function (e){
+					e.preventDefault();
+					$.ajax({
+						method: 'POST',
+						url: baseUrl+'/subforums/save/'+subforum.subforumId,
+					}).then(function (message) {
+						alert(message);
+						refresh();
+					});  			
+				});
+				
 				$('#reportSubforum' + subforum.subforumId).click(function (){
 				  	$('#reportModal').modal('show');
 				  	$('#addReportModalButton').click(function (e) {
@@ -513,6 +554,7 @@ function addTopicClickHandlers(topics, subforumId) {
 			var row = '<h4 class="modal-title" style="display:inline-block;">' + topic.name + '</h4>';
 			row += '<button type="button" id="deleteTopic' + topic.topicId + '" class="btn btn-danger" style="float:right"><i class="glyphicon glyphicon-trash"> </i> Delete </button>  ';
 			row += '<button type="button" id="reportTopic' + topic.topicId + '" class="btn btn-warning" style="float:right"><i class="glyphicon glyphicon-flag"> </i> Report </button>  ';
+			row += '<button type="button" id="saveTopic' + topic.topicId + '" class="btn btn-success" style="float:right"><i class="glyphicon glyphicon-save"> </i> Save</button>  ';
 			row += '<button type="button" id="dislikeTopic' + topic.topicId + '" class="btn btn-danger" style="float:right"><i class="glyphicon glyphicon-thumbs-down"> </i> Dislike</button>  ';
 			row += '<button type="button" id="likeTopic' + topic.topicId + '" class="btn btn-primary" style="float:right"><i class="glyphicon glyphicon-thumbs-up"> </i> Like</button>  ';
 			$('#topicName').append(row);
@@ -522,6 +564,17 @@ function addTopicClickHandlers(topics, subforumId) {
 			$('#topicName').append(counters);
 			
 			// Topic button actions setup
+			
+			$('#saveTopic' + topic.topicId).click(function (e){
+				e.preventDefault();
+				$.ajax({
+					method: 'POST',
+					url: baseUrl+'/topics/save/' + subforumId + '/' + topic.topicId,
+				}).then(function (message) {
+					alert(message);
+					refresh();
+				});  			
+			});
 			
 			$('#reportTopic' + topic.topicId).click(function (){
 			  	$('#reportModal').modal('show');
@@ -706,7 +759,8 @@ function createSubforumPreviewPanel(subforum) {
 	ret += row + '</section></section> <section class="col-md-2">';
 	ret += '<button type="button" class="btn btn-primary btn-sm" id="addTopic' + subforum.subforumId + '"> <i class="glyphicon glyphicon-plus"> </i> Add topic</button>';
 	ret += '<button type="button" class="btn btn-danger btn-sm" id="removeSubforum' + subforum.subforumId + '"> <i class="glyphicon glyphicon-trash"> </i> Delete</button>';
-	ret += '<button type="button" id="reportSubforum' + subforum.subforumId + '" class="btn btn-warning btn-sm"> <i class="glyphicon glyphicon-flag"> </i> Report</button></section></section></section>';
+	ret += '<button type="button" id="reportSubforum' + subforum.subforumId + '" class="btn btn-warning btn-sm"> <i class="glyphicon glyphicon-flag"> </i> Report</button>';
+	ret += '<button type="button" id="saveSubforum' + subforum.subforumId + '" class="btn btn-success btn-sm"> <i class="glyphicon glyphicon-save"> </i> Save</button></section></section></section>';
 	return ret;
 }
 			
