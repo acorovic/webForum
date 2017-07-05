@@ -113,15 +113,20 @@ function performSearch(keyWord) {
 			method: 'POST',
 			data: $('#searchForm').serialize()
 		}).then(function(subforums) {
+			$('#subforumResults').html("");
 			if(subforums != undefined) {
+				$('#subforumResults').append("<h4>Subforums found: </h4>");
 				subforums.forEach(function (subforum) {
 					//add subforum to search result panel
-					alert(subforum.name);
+					subforumRow = createSubforumRow(subforum);
+					$('#subforumResults').append(subforumRow);
 				});
 			} else {
 				// no result
-				alert('No result');
-			}		
+				$('#subforumResults').append("No subforums found!");
+			}	
+			$('#searchModal').modal('hide');
+			$('#showResults').modal('show');
 		});
 	}
 	
@@ -133,15 +138,20 @@ function performSearch(keyWord) {
 			method: 'POST',
 			data: $('#searchForm').serialize()
 		}).then(function(topics) {
+			$('#topicResults').html("");
+			$('#topicResults').append("<h4>Topics found: </h4>");
 			if(topics != undefined) {
 				topics.forEach(function (topic) {
 					//add topic to search result panel
-					alert(topic.name);
+					topicRow = createTopicRow(topic);
+					$('#topicResults').append(topicRow);
 				});
 			} else {
 				// no result
-				alert('No result');
-			}		
+				$('#userResults').append("No topics found!");
+			}	
+			$('#searchModal').modal('hide');
+			$('#showResults').modal('show');
 		});
 	}
 	
@@ -151,17 +161,73 @@ function performSearch(keyWord) {
 			url: baseUrl + "/users/search/" + keyWord,
 			method: 'GET',
 		}).then(function(users) {
+			$('#userResults').html("");
+			$('#userResults').append("<h4>Users found: </h4>");
 			if(users != undefined) {
 				users.forEach(function (user) {
 					//add user to search result panel
-					alert(user.username);
+					userRow = createUserRow(user);
+					$('#userResults').append(userRow);
 				});
 			} else {
 				// no result
-				alert('No result');
-			}		
+				$('#userResults').append("No users found!");
+			}
+			
+			$('#searchModal').modal('hide');
+			$('#showResults').modal('show');
 		});
 	}
+}
+
+function createUserRow(user) {
+	var row = "";
+	var header = '<div class="container"><div class="row"><div class="col-xs-6 col-sm-6 col-md-6"><div class="well well-sm">' +
+				'<div class="row"><div class="col-sm-6 col-md-8">';
+	row += header;
+	row += '<h4>' + user.name + ' ' + user.surname + '</h4>';
+	row += '<h5>' + user.username + '</h4>';
+	row += '<i class="glyphicon glyphicon-envelope"></i>  ' + user.email + '<br>';
+	row += '<i class="glyphicon glyphicon-phone"></i>  ' + user.phoneNumber + '<br>';
+	row += '<button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#sendMessageModal"><i class="glyphicon glyphicon-envelope"></i> Send message </button> <br>';
+	
+	row += '</div></div></div></div></div>';
+	return row;
+}
+
+function createSubforumRow(subforum) {
+	var row = "";
+	var header = '<div class="container"><div class="row"><div class="col-xs-6 col-sm-6 col-md-6"><div class="well well-sm">' +
+				'<div class="row"><div class="col-sm-6 col-md-8">';
+	row += header;
+	if(subforum.icon == "") {
+		subforum.icon = "test.png";
+	}
+	row += '<h4> <img src="' + subforum.icon + '">' + subforum.name + '</h4>';
+	row += '<h4> Description: </h4>' + subforum.description + '<br>';
+	row += '<h4> <i class="glyphicon glyphicon-warning-sign"></i>  Rules: </h4>' + subforum.rules + '<br>';
+	row += '<h4> Responsible moderator: </h4>';
+	row += '<i class="glyphicon glyphicon-user"></i>  ' + subforum.responsibleModerator.username + '<br>';
+	
+	row += '</div></div></div></div></div>';
+	return row;
+}
+
+function createTopicRow(topic) {
+	var row = "";
+	var header = '<div class="container"><div class="row"><div class="col-xs-6 col-sm-6 col-md-6"><div class="well well-sm">' +
+				'<div class="row"><div class="col-sm-6 col-md-8">';
+	row += header;
+	row += '<h4> ' + topic.name + '</h4>';
+	row += '<h4> Content: </h4>' + topic.content + '<br>';
+	row += '<h4> <i class="glyphicon glyphicon-thumbs-up"></i>  Likes count: </h4>' + topic.likes + '<br>';
+	row += '<h4> <i class="glyphicon glyphicon-thumbs-down"></i>  Dislikes count: </h4>' + topic.dislikes + '<br>';
+	row += '<h4> Topic author: </h4>';
+	row += '<i class="glyphicon glyphicon-user"></i>  ' + topic.author.username;
+	row += '   <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#sendMessageModal"><i class="glyphicon glyphicon-envelope"></i> Send message </button>' + '<br>';
+
+	row += '</div></div></div></div></div>';
+	return row;
 }
 
 function changeUserRole() {
