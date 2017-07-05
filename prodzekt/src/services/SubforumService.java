@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -27,6 +28,7 @@ import utils.Config.Role;
 import database.Database;
 import beans.Report;
 import beans.Subforum;
+import beans.Topic;
 import beans.User;
 
 @Path("/subforums")
@@ -224,6 +226,31 @@ public class SubforumService {
 		
 		return "Must be logged in to save the subforum!";
 		
+	}
+	
+	@GET
+	@Path("/recommended")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Topic getRecommendedTopic() {
+		List<Subforum> subforums = db.getSubforums();
+		
+		List<Subforum> recommendSub = new ArrayList<Subforum>();
+		
+		for(Subforum sub : subforums) {
+			if(!sub.getTopics().isEmpty()) {
+				recommendSub.add(sub);
+			}
+		}
+		
+		Random randomGenerator = new Random();
+		int randInd = randomGenerator.nextInt(recommendSub.size());
+		
+		Subforum sub = recommendSub.get(randInd);
+		
+		randInd = randomGenerator.nextInt(sub.getTopics().size());
+		
+		return sub.getTopics().get(randInd);
+			
 	}
 	
 	

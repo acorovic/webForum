@@ -141,6 +141,41 @@ public class CommentService {
 	}
 	
 	@POST
+	@Path("/save/{subforumId}/{topicId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String saveComment(@PathParam("subforumId") int subforumId, @PathParam("topicId") int topicId, Comment com) {		
+		HttpSession session = request.getSession();
+		ArrayList<Subforum> subforums = (ArrayList<Subforum>) db.getSubforums();
+		
+		User user = (User) session.getAttribute("user");
+		
+		if(user != null) {
+			for(Subforum subforum : subforums) {
+				if(subforum.getSubforumId() == subforumId) {
+					for(Topic topic : subforum.getTopics()) {
+						if(topic.getTopicId() == topicId) {
+							for(Comment comment : topic.getComments()) {
+								if(com.getCommentId() == comment.getCommentId()) {
+									if(user.getSavedComments().containsKey(comment.getCommentId())) {
+										return "Comment already saved!";
+									}
+									user.getSavedComments().put(com.getCommentId(), comment.getText());								
+									
+									db.saveDatabase();
+									return "Comment saved!";
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+			
+		return "Must be logged in to save the comment!";
+	}
+	
+	@POST
 	@Path("/dislike/{subforumId}/{topicId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)

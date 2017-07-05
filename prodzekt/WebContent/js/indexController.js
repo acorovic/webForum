@@ -281,6 +281,7 @@ function checkLoggedInStatus() {
 			loadSavedSubforums(user);
 			loadSavedTopics(user);
 			loadSavedComments(user);
+			loadRecommendedTopic();
 			if(user.role != "USER"){
 				$('#reportInbox').show();
 			}else{
@@ -295,9 +296,19 @@ function checkLoggedInStatus() {
 			loadMessages();
 			loadReports();
 		} else {
+			$('#recommendedTopicPanel').hide();
 			$('#sendMessageButton').hide();
 			$('#changeUserRoleButton').hide();
 		}
+	});
+}
+
+function loadRecommendedTopic() {
+	$.ajax({
+		url: baseUrl + "/subforums/recommended",
+		method: 'GET'
+	}).then(function(topic){
+		$('#recommendedTopics').append(topic.name);
 	});
 }
 
@@ -337,7 +348,14 @@ function loadSavedTopics(user) {
 }
 
 function loadSavedComments(user) {
-	
+	if(user.savedComments != undefined) {
+		$('#listOfSavedComments').html("");
+		var savedComments = user.savedComments;
+		
+		for(key in savedComments) {
+			$('#listOfSavedComments').append("<li>"  + savedComments[key] + "</li>");
+		}	
+	}
 }
 
 function loadDislikedComments(user) {
@@ -633,6 +651,7 @@ function addTopicClickHandlers(topics, subforumId) {
 					commentRow += '<section class="col-md-9">' + comment.text + '</section>';
 					commentRow += '<hr><section>' + '<button type="button" id="commentLike' + comment.commentId +'" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-thumbs-up"> </i> Like</button>  ';
 					commentRow += '<button type="button" id="commentDislike' + comment.commentId + '" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-thumbs-down"> </i> Dislike</button>  ';
+					commentRow += '<button type="button" id="commentSave' + comment.commentId + '" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-save"> </i> Save</button>  ';
 					commentRow += '<button type="button" id="commentReport' + comment.commentId + '" class="btn btn-warning btn-sm"><i class="glyphicon glyphicon-flag" > </i> Report</button>  ';
 					commentRow += '<button type="button" id="commentEdit' + comment.commentId + '" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-italic"> </i> Edit</button>  ';
 					commentRow += '<button type="button" id="commentDelete' + comment.commentId + '" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"> </i> Delete</button>  '+ '</section>';
@@ -641,6 +660,20 @@ function addTopicClickHandlers(topics, subforumId) {
 					$('#topicComments').append(commentRow);
 					
 					//Setup comment buttons
+					$('#commentSave' + comment.commentId).click(function (){
+						$.ajax({
+							method: 'POST',
+							url: baseUrl + '/comments/save/' + subforumId + '/' + topic.topicId /*+ '/' + comment.commentId*/,
+							dataType: 'json',
+							data: JSON.stringify(comment),
+							contentType: 'application/json',
+							complete: function(message) {
+								alert(message.responseText);
+								refresh();
+							}
+						});
+					});
+					
 					$('#commentLike' + comment.commentId).click(function (){
 						$.ajax({
 							method: 'POST',
@@ -650,6 +683,7 @@ function addTopicClickHandlers(topics, subforumId) {
 							contentType: 'application/json',
 							complete: function(message) {
 								alert(message.responseText);
+								refresh();
 							}
 						});
 					});
@@ -663,6 +697,7 @@ function addTopicClickHandlers(topics, subforumId) {
 							contentType: 'application/json',
 							complete: function(message) {
 								alert(message.responseText);
+								refresh();
 							}
 						});
 					});
