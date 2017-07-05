@@ -52,6 +52,7 @@
           		</ul>
           		
           		<ul class="nav navbar-nav navbar-right">
+          			<li><button data-toggle="modal" data-target="#searchModal" class="btn btn-success btn-sm" style="margin-top: 10px"><i class="glyphicon glyphicon-search"> </i> Search</button> </li>
           			<li id="navbarLoggedIn" class="dropdown">
           				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
           					<span id="loggedInUserame"></span>
@@ -230,6 +231,74 @@
 						<div class="form-group">
 							<div class="col-sm-offset-2 col-sm-10">
 								<button type="submit" class="btn btn-primary text-right">Log in</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!--Search modal-->
+	<div id="searchModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title"><i class="glyphicon glyphicon-search"> </i> Search</h4>
+				</div>
+				<div class="modal-body">
+					<form id="searchForm" class="form-horizontal" action="/prodzekt/rest/users/login" method="POST" role="form">
+						<div class="form-group">
+							<label for="keyWord" class="col-sm-2 control-label">Key word:</label>
+							<div class="col-sm-10">
+								<input name="keyWord" type="text" class="form-control" id="keyWord" placeholder="Enter seach key word...">
+							</div>
+						</div>
+						
+						<hr>
+						<div class="form-group">
+							<label for="subforumCriteria" class="col-sm-2 control-label">Subforum criteria:</label>
+							<div class="col-sm-10">
+								<label><input id="subforumCriteriaName" name="subforumCriteriaName" value="true" type="checkbox">Name</label>
+							</div>
+							<div class="col-sm-10">
+								<label><input id="subforumCriteriaDescription" name="subforumCriteriaDescription" value="true" type="checkbox">Description</label>
+							</div>
+							<div class="col-sm-10 col-sm-offset-2" style="word-break: break-all">
+								<label><input id="subforumCriteriaModerator" name="subforumCriteriaModerator" value="true" type="checkbox" >Responsible moderator</label>
+							</div>
+						</div>
+						
+						<hr>
+						<div class="form-group">
+							<label for="topicCriteria" class="col-sm-2 control-label">Topic criteria:</label>
+							<div class="col-sm-10">
+								<label><input id="topicCriteriaName" name="topicCriteriaName" value="true" type="checkbox">Name</label>
+							</div>
+							<div class="col-sm-10">
+								<label><input id="topicCriteriaDescription" name="topicCriteriaDescription" value="true" type="checkbox">Description</label>
+							</div>
+							<div class="col-sm-10 col-sm-offset-2" style="word-break: break-all">
+								<label><input id="topicCriteriaAuthor" name="topicCriteriaAuthor" value="true" type="checkbox" >Author</label>
+							</div>
+							<div class="col-sm-10 col-sm-offset-2" style="word-break: break-all">
+								<label><input id="topicCriteriaSubforum" name="topicCriteriaSubforum" value="true" type="checkbox" >Subforum parent</label>
+							</div>
+						</div>
+						
+						<hr>
+						<div class="form-group">
+							<label for="userCriteria" class="col-sm-2 control-label">User criteria:</label>
+							<div class="col-sm-10">
+								<label><input id="userCriteriaUsername" name="userCriteriaUsername" value="true" type="checkbox">Username</label>
+							</div>
+			
+						</div>
+					
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<button type="submit" id="performSearchButton" class="btn btn-success text-right">Search</button>
 							</div>
 						</div>
 					</form>

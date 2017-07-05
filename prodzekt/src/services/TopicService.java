@@ -1,5 +1,8 @@
 package services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,6 +16,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
+
 
 
 import utils.Config.Role;
@@ -165,9 +170,51 @@ public class TopicService {
 				}
 			}
 		
+		}	
+		return "Must be logged in to dislike topic!";
+	}
+	
+	@POST
+	@Path("/search/{keyWord}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public List<Topic> searchTopic(@PathParam("keyWord") String keyWord, @FormParam("topicCriteriaName") Boolean name,
+			@FormParam("topicCriteriaDescription") Boolean description, @FormParam("topicCriteriaAuthor") Boolean auth,
+			@FormParam("topicCriteriaSubforum") Boolean sub) {
+		
+		List<Topic> retVal = new ArrayList<Topic>();
+		ArrayList<Subforum> subforums = (ArrayList<Subforum>) db.getSubforums();
+		// setup unchecked fields
+		if(name == null) {
+			name = false;
+		}
+		if(description == null) {
+			description = false;
+		}
+		if(auth == null) {
+			auth = false;
+		}
+		if(sub == null) {
+			sub = false;
 		}
 		
-		return "Must be logged in to dislike topic!";
+		
+		for(Subforum subforum : subforums) {
+			for(Topic topic : subforum.getTopics()) {
+				if((name && topic.getName().contains(keyWord)) || (description && topic.getContent().contains(keyWord)) 
+						|| (auth && topic.getAuthor().getUsername().contains(keyWord))
+						|| (sub && subforum.getName().contains(keyWord))) {
+					retVal.add(topic);
+				}
+					
+			}
+		}
+		
+		if(retVal.isEmpty()) {
+			return null;
+		} else {
+			return retVal;
+		}
 	}
 	
 }

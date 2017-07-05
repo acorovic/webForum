@@ -1,10 +1,12 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -96,6 +98,40 @@ public class SubforumService {
 		}
 		
 		return "Must be logged in to delete subforum!";
+		
+	}
+	
+	@POST
+	@Path("/search/{keyWord}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public List<Subforum> searchName(@PathParam("keyWord") String keyWord, @FormParam("subforumCriteriaName") Boolean name,
+			@FormParam("subforumCriteriaDescription") Boolean description, @FormParam("subforumCriteriaModerator") Boolean mod) {
+		List<Subforum> returnVal = new ArrayList<Subforum>();
+		// Setup unchecked fields
+		if(description == null) {
+			description = false;
+		}
+		if(name == null) {
+			name = false;
+		}
+		if(mod == null) {
+			mod = false;
+		}
+
+		for(Subforum subforum : db.getSubforums()) {
+			if((subforum.getName().contains(keyWord) && name) || 
+					(subforum.getDescription().contains(keyWord) && description) ||
+					(subforum.getModerators().get(0).getUsername().contains(keyWord) && mod)) {
+				returnVal.add(subforum);
+			}
+		}		
+		
+		if(returnVal.isEmpty()) {
+			return null;
+		} else {
+			return returnVal;
+		}
 		
 	}
 	

@@ -47,9 +47,80 @@ $(document).ready(function () {
 		logoutUser();
 	});
 	
+	$('#performSearchButton').click(function (e) {
+		e.preventDefault();
+		var keyWord = $('#keyWord').val();
+		performSearch(keyWord);
+	});
+	
 	loadSubforums();
 	
 });
+
+
+function performSearch(keyWord) {	
+	// search subforums
+	if($('#subforumCriteriaName').is(':checked') || $('#subforumCriteriaDescription').is(':checked') 
+			|| $('#subforumCriteriaModerator').is(':checked')) {
+		$.ajax({
+			url: baseUrl + "/subforums/search/" + keyWord,
+			method: 'POST',
+			data: $('#searchForm').serialize()
+		}).then(function(subforums) {
+			if(subforums != undefined) {
+				subforums.forEach(function (subforum) {
+					//add subforum to search result panel
+					alert(subforum.name);
+				});
+			} else {
+				// no result
+				alert('No result');
+			}		
+		});
+	}
+	
+	// search topics
+	if($('#topicCriteriaName').is(':checked') || $('#topicCriteriaDescription').is(':checked') 
+			|| $('#topicCriteriaAuthor').is(':checked') || $('#topicCriteriaSubforum').is(':checked')) {
+		$.ajax({
+			url: baseUrl + "/topics/search/" + keyWord,
+			method: 'POST',
+			data: $('#searchForm').serialize()
+		}).then(function(topics) {
+			if(topics != undefined) {
+				topics.forEach(function (topic) {
+					//add topic to search result panel
+					alert(topic.name);
+				});
+			} else {
+				// no result
+				alert('No result');
+			}		
+		});
+	}
+	
+	// search users
+	if($('#userCriteriaUsername').is(':checked')) {
+		$.ajax({
+			url: baseUrl + "/users/search/" + keyWord,
+			method: 'GET',
+		}).then(function(users) {
+			if(users != undefined) {
+				users.forEach(function (user) {
+					//add user to search result panel
+					alert(user.username);
+				});
+			} else {
+				// no result
+				alert('No result');
+			}		
+		});
+	}
+	
+	
+	
+}
+
 
 
 function changeUserRole() {

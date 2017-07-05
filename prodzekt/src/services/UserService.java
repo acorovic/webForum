@@ -2,6 +2,7 @@ package services;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
 
 
 
@@ -180,6 +182,25 @@ public class UserService {
 		}
 		
 		return "Error";
+	}
+	
+	@GET
+	@Path("/search/{keyWord}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<User> searchUsers(@PathParam("keyWord") String keyWord) {
+		List<User> returnVal = new ArrayList<User>();
+		
+		for(User user : db.getUsers()) {
+			if(user.getUsername().contains(keyWord)) {
+				returnVal.add(user);
+			}
+		}
+		
+		if(returnVal.isEmpty()) {
+			return null;
+		} else {
+			return returnVal;
+		}
 	}
 	
 
