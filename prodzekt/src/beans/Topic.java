@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @SuppressWarnings("serial")
@@ -22,6 +23,7 @@ public class Topic implements Serializable{
 	
 	private String parentSubforum;
 	
+	@JsonManagedReference
 	private List<Comment> comments;
 	
 	private int topicId;

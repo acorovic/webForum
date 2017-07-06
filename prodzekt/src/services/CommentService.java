@@ -3,6 +3,7 @@ package services;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,27 @@ public class CommentService {
 	ServletContext context;
 	
 	Database db = Database.getInstance();
+	
+	@GET
+	@Path("/{commentId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Topic getParentTopic(@PathParam("commentId") int id){
+		return db.searchCommentById(id).getParentTopic();
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Comment> getAllComments(){
+		List<Topic> topics = new ArrayList<Topic>();
+		for(Subforum subforum:db.getSubforums()){
+			topics.addAll(subforum.getTopics());
+		}
+		List<Comment> comments = new ArrayList<Comment>();
+		for(Topic topic: topics){
+			comments.addAll(topic.getComments());
+		}
+		return comments;
+	}
 	
 	@POST
 	@Path("/{topicId}")

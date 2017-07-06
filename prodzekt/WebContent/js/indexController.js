@@ -103,7 +103,6 @@ function addSubforumForm(e, createSubforumId) {
     });
 }
 
-
 function performSearch(keyWord) {	
 	// search subforums
 	if($('#subforumCriteriaName').is(':checked') || $('#subforumCriteriaDescription').is(':checked') 
@@ -308,7 +307,13 @@ function loadRecommendedTopic() {
 		url: baseUrl + "/subforums/recommended",
 		method: 'GET'
 	}).then(function(topic){
-		$('#recommendedTopics').append(topic.name);
+		$('#recommendedTopics').append('<i class="glyphicon glyphicon-hand-right"></i><a href="#" id="recomendedTopicClick' + topic.topicId + '">&nbsp;&nbsp;&nbsp;'+ topic.name +'&nbsp;&nbsp;&nbsp;</a> <i class="glyphicon glyphicon-hand-left"> </i>');
+		$.ajax({
+			url: baseUrl + "/subforums/"+topic.parentSubforum,
+			method: 'GET'
+		}).then(function(s){
+			addTopicClickHandler(topic,s.subforumId,"#recomendedTopicClick");
+		});
 	});
 }
 
@@ -323,75 +328,187 @@ function loadSavedSubforums(user) {
 	}
 }
 
-
 function loadLikedComments(user) {
-	if(user.likedComments != undefined) {
-		$('#listOfLikedComments').html("");
-		var likedComments = user.likedComments;
-		
-		for(key in likedComments) {
-			$('#listOfLikedComments').append("<li>"  + likedComments[key] + "</li>");
+	$.ajax({
+		url: baseUrl + '/comments',
+		method: 'GET'
+	}).then(function(comments){
+		if(user.likedComments != undefined) {
+			$('#listOfLikedComments').html("");
+			var likedComments = user.likedComments;
+			
+			comments.forEach(function(comment){
+				for(key in likedComments) {
+					if(key==comment.commentId){
+						$.ajax({
+							url: baseUrl + '/comments/'+comment.commentId,
+							method: 'GET'
+						}).then(function(parentTopic){
+							$('#listOfLikedComments').append('<li><a href="#" id="likedCommentClick' + parentTopic.topicId + '">'  + likedComments[key] + '</li>');
+							$.ajax({
+								url: baseUrl + "/subforums/"+parentTopic.parentSubforum,
+								method: 'GET'
+							}).then(function(s){
+								addTopicClickHandler(parentTopic,s.subforumId , "#likedCommentClick");
+							});
+						});
+						break;
+					}
+					
+				}	
+			});		
 		}
-		
-	}
+	});
 }
 
 function loadSavedTopics(user) {
-	if(user.savedTopics != undefined) {
-		$('#listOfSavedTopics').html("");
-		var savedTopics = user.savedTopics;
+	$.ajax({
+		url: baseUrl + "/topics",
+		method: 'GET'
+	}).then(function(topics){
+		var allTopics=topics;
 		
-		for(key in savedTopics) {
-			$('#listOfSavedTopics').append("<li>"  + savedTopics[key] + "</li>");
-		}	
-	}
+		if(user.savedTopics != undefined) {
+			$('#listOfSavedTopics').html("");
+			var savedTopics = user.savedTopics;
+			
+			allTopics.forEach(function(topic){
+				for(key in savedTopics) {
+					if(key==topic.topicId){
+						$('#listOfSavedTopics').append('<li><a href="#" id="savedTopicClick' + topic.topicId + '">'  + savedTopics[key] + '</li>');
+						$.ajax({
+							url: baseUrl + "/subforums/"+topic.parentSubforum,
+							method: 'GET'
+						}).then(function(s){
+							addTopicClickHandler(topic,s.subforumId , "#savedTopicClick");
+						});
+					}	
+				}
+			});
+		}
+	});
 }
 
 function loadSavedComments(user) {
-	if(user.savedComments != undefined) {
-		$('#listOfSavedComments').html("");
-		var savedComments = user.savedComments;
-		
-		for(key in savedComments) {
-			$('#listOfSavedComments').append("<li>"  + savedComments[key] + "</li>");
-		}	
-	}
+	$.ajax({
+		url: baseUrl + '/comments',
+		method: 'GET'
+	}).then(function(comments){
+		if(user.savedComments != undefined) {
+			$('#listOfSavedComments').html("");
+			var savedComments = user.savedComments;
+			
+			comments.forEach(function(comment){
+				for(key in savedComments) {
+					if(key==comment.commentId){
+						$.ajax({
+							url: baseUrl + '/comments/'+comment.commentId,
+							method: 'GET'
+						}).then(function(parentTopic){
+							$('#listOfSavedComments').append('<li><a href="#" id="savedCommentClick' + parentTopic.topicId + '">'  + savedComments[key] + '</li>');
+							$.ajax({
+								url: baseUrl + "/subforums/"+parentTopic.parentSubforum,
+								method: 'GET'
+							}).then(function(s){
+								addTopicClickHandler(parentTopic,s.subforumId , "#savedCommentClick");
+							});
+						});
+						break;
+					}
+					
+				}	
+			});		
+		}
+	});
 }
 
 function loadDislikedComments(user) {
-	if(user.dislikedComments != undefined) {
-		$('#listOfDislikedComments').html("");
-		var dislikedComments = user.dislikedComments;
-		
-		for(key in dislikedComments) {
-			$('#listOfDislikedComments').append("<li>"  + dislikedComments[key] + "</li>");
+	$.ajax({
+		url: baseUrl + '/comments',
+		method: 'GET'
+	}).then(function(comments){
+		if(user.dislikedComments != undefined) {
+			$('#listOfDislikedComments').html("");
+			var dislikedComments = user.dislikedComments;
+			
+			comments.forEach(function(comment){
+				for(key in dislikedComments) {
+					if(key==comment.commentId){
+						$.ajax({
+							url: baseUrl + '/comments/'+comment.commentId,
+							method: 'GET'
+						}).then(function(parentTopic){
+							$('#listOfDislikedComments').append('<li><a href="#" id="dislikedCommentClick' + parentTopic.topicId + '">'  + dislikedComments[key] + '</li>');
+							$.ajax({
+								url: baseUrl + "/subforums/"+parentTopic.parentSubforum,
+								method: 'GET'
+							}).then(function(s){
+								addTopicClickHandler(parentTopic,s.subforumId , "#dislikedCommentClick");
+							});
+						});
+						break;
+					}
+					
+				}	
+			});		
 		}
-		
-	}
+	});
 }
 
 function loadLikedTopics(user) {
-	if(user.likedTopics != undefined) {
-		$('#listOfLikedTopics').html("");
-		var likedTopics = user.likedTopics;
+	$.ajax({
+		url: baseUrl + "/topics",
+		method: 'GET'
+	}).then(function(topics){
+		var allTopics=topics;
 		
-		for(key in likedTopics) {
-			$('#listOfLikedTopics').append("<li>"  + likedTopics[key] + "</li>");
+		if(user.likedTopics != undefined) {
+			$('#listOfLikedTopics').html("");
+			var likedTopics = user.likedTopics;
+			
+			allTopics.forEach(function(topic){
+				for(key in likedTopics) {
+					if(key==topic.topicId){
+						$('#listOfLikedTopics').append('<li><a href="#" id="likedTopicClick' + topic.topicId + '">'  + likedTopics[key] + '</li>');
+						$.ajax({
+							url: baseUrl + "/subforums/"+topic.parentSubforum,
+							method: 'GET'
+						}).then(function(s){
+							addTopicClickHandler(topic,s.subforumId,"#likedTopicClick");
+						});
+					}	
+				}
+			});
 		}
-		
-	}
+	});
 }
 
 function loadDislikedTopics(user) {
-	if(user.likedTopics != undefined) {
-		$('#listOfDislikedTopics').html("");
-		var dislikedTopics = user.dislikedTopics;
+	$.ajax({
+		url: baseUrl + "/topics",
+		method: 'GET'
+	}).then(function(topics){
+		var allTopics=topics;
 		
-		for(key in dislikedTopics) {
-			$('#listOfDislikedTopics').append("<li>"  + dislikedTopics[key] + "</li>");
+		if(user.likedTopics != undefined) {
+			$('#listOfDislikedTopics').html("");
+			var dislikedTopics = user.dislikedTopics;
+			
+			allTopics.forEach(function(topic){
+				for(key in dislikedTopics) {
+					if(key==topic.topicId){
+						$('#listOfDislikedTopics').append('<li><a href="#" id="dislikedTopicClick' + topic.topicId + '">'  + dislikedTopics[key] + '</li>');
+						$.ajax({
+							url: baseUrl + "/subforums/"+topic.parentSubforum,
+							method: 'GET'
+						}).then(function(s){
+							addTopicClickHandler(topic,s.subforumId,"#dislikedTopicClick");
+						});
+					}	
+				}
+			});
 		}
-		
-	}
+	});
 }
 
 function loadReports(){
@@ -491,22 +608,12 @@ function loadSubforums() {
 	}).then(function (subforums){
 		if(subforums != undefined) {
 			subforums.forEach(function (subforum) {
-				var subforumRow = '<li>';
-			
-				subforumRow += '<a href="#" id="subforum' + subforum.subforumId + '">' + subforum.name + '</a></li>';
-				
-				$('#subforums').append(subforumRow);
-				
-				$('#subforum' + subforum.subforumId).click(function () {
-					//TODO: add full view of subforum and all themes
-					alert(subforum.name);
-				});
 				
 				var subforumPreviewPanel = createSubforumPreviewPanel(subforum);
 				
 				$('#subforumsTopicsPreview').append(subforumPreviewPanel);
 				
-				addTopicClickHandlers(subforum.topics, subforum.subforumId);
+				addTopicsClickHandlers(subforum.topics, subforum.subforumId);
 				
 				$('#saveSubforum' + subforum.subforumId).click(function (e){
 					e.preventDefault();
@@ -563,7 +670,214 @@ function loadSubforums() {
 	});
 }
 
-function addTopicClickHandlers(topics, subforumId) {
+function addTopicClickHandler(topic,subforumId,buttonId){
+	$(buttonId + topic.topicId).click(function (){
+		$('#topicName').html("");
+		$('#topicComments').html("");
+		
+		var row = '<h4 class="modal-title" style="display:inline-block;">' + topic.name + '</h4>';
+		row += '<button type="button" id="deleteTopic' + topic.topicId + '" class="btn btn-danger" style="float:right"><i class="glyphicon glyphicon-trash"> </i> Delete </button>  ';
+		row += '<button type="button" id="reportTopic' + topic.topicId + '" class="btn btn-warning" style="float:right"><i class="glyphicon glyphicon-flag"> </i> Report </button>  ';
+		row += '<button type="button" id="saveTopic' + topic.topicId + '" class="btn btn-success" style="float:right"><i class="glyphicon glyphicon-save"> </i> Save</button>  ';
+		row += '<button type="button" id="dislikeTopic' + topic.topicId + '" class="btn btn-danger" style="float:right"><i class="glyphicon glyphicon-thumbs-down"> </i> Dislike</button>  ';
+		row += '<button type="button" id="likeTopic' + topic.topicId + '" class="btn btn-primary" style="float:right"><i class="glyphicon glyphicon-thumbs-up"> </i> Like</button> ';
+		$('#topicName').append(row);
+		
+		var counters = "<p><br>Topic likes: " + topic.likes + "</p>";
+		counters += "<p> Topic dislikes: " + topic.dislikes + "</p>";
+		$('#topicName').append(counters);
+		
+		// Topic button actions setup
+		
+		$('#saveTopic' + topic.topicId).click(function (e){
+			e.preventDefault();
+			$.ajax({
+				method: 'POST',
+				url: baseUrl+'/topics/save/' + subforumId + '/' + topic.topicId,
+			}).then(function (message) {
+				alert(message);
+				refresh();
+			});  			
+		});
+		
+		$('#reportTopic' + topic.topicId).click(function (){
+		  	$('#reportModal').modal('show');
+		  	$('#addReportModalButton').click(function (e) {
+		  		e.preventDefault();
+		  		$.ajax({
+					method: 'POST',
+					url: baseUrl+'/reports/'+topic.topicId,
+					data: $('#reportForm').serialize()
+				}).then(function (message) {
+					alert(message);
+					refresh();
+				});
+		  	});				
+		});
+		
+		$('#deleteTopic' + topic.topicId).click(function (){
+			$.ajax({
+				method: 'DELETE',
+				url: baseUrl + '/topics/' + subforumId + '/' +  topic.topicId,
+			}).then(function (message) {
+				alert(message);
+				refresh();
+			});
+		});
+		
+		$('#likeTopic' + topic.topicId).click(function (){
+			$.ajax({
+				method: 'PUT',
+				url: baseUrl + '/topics/like/' + subforumId + '/' +  topic.topicId,
+			}).then(function (message) {
+				alert(message);
+				refresh();
+			});
+		});
+		
+		$('#dislikeTopic' + topic.topicId).click(function (){
+			$.ajax({
+				method: 'PUT',
+				url: baseUrl + '/topics/dislike/' + subforumId + '/' +  topic.topicId,
+			}).then(function (message) {
+				alert(message);
+				refresh();
+			});
+		});
+		
+		
+		if(topic.comments != undefined) {
+			topic.comments.forEach(function (comment) {
+				var commentRow = '<div id="commentId' + comment.commentId + '"> <section class="panel panel-info col-md-12"><section class="row panel-body">';
+				commentRow += '<section class="col-md-3"> <h4>' + comment.author.username + '</h4><br> Created on: <br> ' + comment.date + '<br>';
+				if(comment.modified == true) {
+					commentRow += " Edited on: " + comment.modifiedData;
+				}
+				commentRow += '</section>';
+				commentRow += '<section class="col-md-9">' + comment.text + '</section>';
+				commentRow += '<hr><section>' + '<button type="button" id="commentLike' + comment.commentId +'" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-thumbs-up"> </i> Like</button>  ';
+				commentRow += '<button type="button" id="commentDislike' + comment.commentId + '" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-thumbs-down"> </i> Dislike</button>  ';
+				commentRow += '<button type="button" id="commentSave' + comment.commentId + '" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-save"> </i> Save</button>  ';
+				commentRow += '<button type="button" id="commentReport' + comment.commentId + '" class="btn btn-warning btn-sm"><i class="glyphicon glyphicon-flag" > </i> Report</button>  ';
+				commentRow += '<button type="button" id="commentEdit' + comment.commentId + '" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-italic"> </i> Edit</button>  ';
+				commentRow += '<button type="button" id="commentDelete' + comment.commentId + '" class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash"> </i> Delete</button>  '+ '</section>';
+				
+				commentRow += '</div>';
+				$('#topicComments').append(commentRow);
+				
+				//Setup comment buttons
+				$('#commentSave' + comment.commentId).click(function (){
+					$.ajax({
+						method: 'POST',
+						url: baseUrl + '/comments/save/' + subforumId + '/' + topic.topicId /*+ '/' + comment.commentId*/,
+						dataType: 'json',
+						data: JSON.stringify(comment),
+						contentType: 'application/json',
+						complete: function(message) {
+							alert(message.responseText);
+							refresh();
+						}
+					});
+				});
+				
+				$('#commentLike' + comment.commentId).click(function (){
+					$.ajax({
+						method: 'POST',
+						url: baseUrl + '/comments/like/' + subforumId + '/' + topic.topicId /*+ '/' + comment.commentId*/,
+						dataType: 'json',
+						data: JSON.stringify(comment),
+						contentType: 'application/json',
+						complete: function(message) {
+							alert(message.responseText);
+							refresh();
+						}
+					});
+				});
+				
+				$('#commentDislike' + comment.commentId).click(function (){
+					$.ajax({
+						method: 'POST',
+						url: baseUrl + '/comments/dislike/' + subforumId + '/' + topic.topicId /*+ '/' + comment.commentId*/,
+						dataType: 'json',
+						data: JSON.stringify(comment),
+						contentType: 'application/json',
+						complete: function(message) {
+							alert(message.responseText);
+							refresh();
+						}
+					});
+				});
+				
+				$('#commentEdit' + comment.commentId).click(function (){
+					$('#editCommentContent').val(comment.text);
+					$('#editCommentModal').modal('show');
+
+					$('#editCommentForm').submit(function(e){
+						e.preventDefault();
+						$.ajax({
+							method: 'PUT',
+							url: baseUrl+'/comments/'+ subforumId + '/' + topic.topicId + '/' + comment.commentId,
+							data: $('#editCommentForm').serialize()
+						}).then(function (message) {
+							alert(message);
+							refresh();
+						});
+					});
+					
+				});
+				
+				$('#commentReport' + comment.commentId).click(function (){
+				  	$('#reportModal').modal('show');
+				  	$('#addReportModalButton').click(function (e) {
+				  		e.preventDefault();
+				  		$.ajax({
+							method: 'POST',
+							url: baseUrl+'/reports/'+comment.commentId,
+							data: $('#reportForm').serialize()
+						}).then(function (message) {
+							alert(message);
+							refresh();
+						});
+				  	});				
+				});
+				
+				$('#commentDelete' + comment.commentId).click(function () {
+					$.ajax({
+						method: 'DELETE',
+						url: baseUrl + '/comments/' +  topic.topicId + '/' + comment.commentId,
+					}).then(function (message) {
+						alert(message);
+						refresh();
+					});
+				});
+	
+			});
+		}
+		
+		// Comment form setup
+		var addCommentFormId = 'commentForm';
+		$('#' + addCommentFormId).submit(function (e){
+			e.preventDefault();
+			var commentContent = $('#commentContent').val();
+			if(commentContent == "") {
+				alert("Empty comment!");
+			} else {
+				$.ajax({
+					method: 'POST',
+					url: baseUrl + '/comments/' + topic.topicId,
+					data: $('#' + addCommentFormId).serialize()
+				}).then(function (message) {
+					alert(message);
+					refresh();
+				});
+			}
+		});
+		
+		$('#topicModal').modal('show');
+	});
+}
+
+function addTopicsClickHandlers(topics, subforumId) {
 	topics.forEach(function(topic) {
 		$('#topicClick' + topic.topicId).click(function (){
 			$('#topicName').html("");
@@ -574,10 +888,10 @@ function addTopicClickHandlers(topics, subforumId) {
 			row += '<button type="button" id="reportTopic' + topic.topicId + '" class="btn btn-warning" style="float:right"><i class="glyphicon glyphicon-flag"> </i> Report </button>  ';
 			row += '<button type="button" id="saveTopic' + topic.topicId + '" class="btn btn-success" style="float:right"><i class="glyphicon glyphicon-save"> </i> Save</button>  ';
 			row += '<button type="button" id="dislikeTopic' + topic.topicId + '" class="btn btn-danger" style="float:right"><i class="glyphicon glyphicon-thumbs-down"> </i> Dislike</button>  ';
-			row += '<button type="button" id="likeTopic' + topic.topicId + '" class="btn btn-primary" style="float:right"><i class="glyphicon glyphicon-thumbs-up"> </i> Like</button>  ';
+			row += '<button type="button" id="likeTopic' + topic.topicId + '" class="btn btn-primary" style="float:right"><i class="glyphicon glyphicon-thumbs-up"> </i> Like</button> ';
 			$('#topicName').append(row);
 			
-			var counters = "<p>Topic likes: " + topic.likes + "</p>";
+			var counters = "<p><br>Topic likes: " + topic.likes + "</p>";
 			counters += "<p> Topic dislikes: " + topic.dislikes + "</p>";
 			$('#topicName').append(counters);
 			
@@ -799,8 +1113,6 @@ function createSubforumPreviewPanel(subforum) {
 	return ret;
 }
 			
-
-
 function setMessageSeen(messageId) {
 	$.ajax({
 		url: baseUrl + "/users/seen/" + messageId

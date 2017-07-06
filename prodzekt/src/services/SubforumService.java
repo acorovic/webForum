@@ -48,6 +48,13 @@ public class SubforumService {
 		return db.getSubforums();
 	}
 	
+	@GET
+	@Path("/{subforumId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Subforum getSubforumByName(@PathParam("subforumId") int id){
+		return db.searchSubforumById(id);
+	}
+	
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	public String addSubforum(@FormParam("subforumName") String name, @FormParam("subforumDescription") String description,

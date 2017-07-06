@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -37,6 +38,16 @@ public class TopicService {
 	ServletContext context;
 	
 	Database db = Database.getInstance();
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Topic> getTopics(){
+		List<Topic> topics = new ArrayList<Topic>();
+		for(Subforum subforum:db.getSubforums()){
+			topics.addAll(subforum.getTopics());
+		}
+		return topics;
+	}
 	
 	@POST
 	@Path("/{subforumId}")

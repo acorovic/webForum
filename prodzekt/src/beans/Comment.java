@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -22,7 +23,7 @@ public class Comment implements Serializable{
 	private Comment parentComment;
 	//private List<Comment> childComments;
 	
-	@JsonIgnore
+	@JsonBackReference
 	private Topic parentTopic;
 	
 	private int commentId;
@@ -141,12 +142,10 @@ public class Comment implements Serializable{
 		this.childComments = childComments;
 	}
 */	
-	@JsonIgnore
 	public Topic getParentTopic() {
 		return parentTopic;
 	}
 	
-	@JsonProperty
 	public void setParentTopic(Topic parentTopic) {
 		this.parentTopic = parentTopic;
 	}

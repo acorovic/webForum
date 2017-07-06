@@ -20,11 +20,7 @@ public class WebApplication implements Serializable {
 		this.subforums = new ArrayList<Subforum>();
 		this.reports = new ArrayList<Report>();
 		
-		loadTestData();
-		Comment com1 = new Comment(users.get(0), "ne valja", null, null);
-		(subforums.get(0).getTopics()).get(0).addComent(com1);
-		
-		
+		loadTestData();			
 	}
 	
 	private synchronized void loadTestData() {
@@ -45,12 +41,13 @@ public class WebApplication implements Serializable {
 		Topic top2 = new Topic("riza", admin, "ne valja", Integer.toString(sub1.getSubforumId()));
 		
 		Comment com1 = new Comment(admin, "testKomentar", top1, null);
+		Comment com2 = new Comment(user1,"drugi teszt komentar poy",top1,null);
 		
 		Report rep1 = new Report(user1.getUsername(), "JEBO SVILJU", top1,top1.getTopicId());
 		reports.add(rep1);
 		
 		top1.addComent(com1);
-		
+		top1.addComent(com2);
 		
 		sub1.addTopic(top1);
 		sub1.addTopic(top2);
