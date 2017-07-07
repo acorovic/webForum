@@ -100,6 +100,14 @@ public class SubforumService {
 						if((report=db.searchReport(subforumId))!=null){
 							db.getReports().remove(report);
 						}
+						
+						// Delete from saved in users
+						for(User usr : db.getUsers()) {
+							if(usr.getSavedSubforums().containsKey(subforumId)) {
+								usr.getSavedSubforums().remove(subforumId);
+							}
+						}
+						
 						db.getSubforums().remove(subforum);
 						break;
 					}
@@ -194,7 +202,7 @@ public class SubforumService {
 
 					db.getSubforums().add(subforum);
 					db.saveDatabase();
-					return "Added a forum " + subforumToAdd.getName();
+					return "Added a subforum ";
 				}
 				else {
 					return "Name, description and rules are required fileds!";

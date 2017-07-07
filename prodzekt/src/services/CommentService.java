@@ -112,6 +112,19 @@ public class CommentService {
 							}
 							topic.deleteComment(commentId);
 							
+							// Delete from users
+							for(User usr : db.getUsers()) {
+								if(usr.getSavedComments().containsKey(commentId)) {
+									usr.getSavedComments().remove(commentId);
+								}
+								if(usr.getLikedComments().containsKey(commentId)) {
+									usr.getLikedComments().remove(commentId);
+								}
+								if(usr.getDislikedComments().containsKey(commentId)) {
+									usr.getDislikedComments().remove(commentId);
+								}
+							}
+							
 							db.saveDatabase();
 							
 							return "Comment deleted!";

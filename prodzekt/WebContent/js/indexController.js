@@ -35,6 +35,7 @@ $(document).ready(function () {
 	var createSubforumId = 'createSubforumForm';
 	$('#' + createSubforumId).submit(function (e) {
 		addSubforumForm(e, createSubforumId);
+		refresh();
 	});
 	
 	/*var reportId = 'reportForm';

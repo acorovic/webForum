@@ -98,6 +98,20 @@ public class TopicService {
 									db.getReports().remove(report);
 								}
 								subforum.getTopics().remove(topic);
+								
+								// Delete from saved users
+								for(User usr : db.getUsers()) {
+									if(usr.getSavedTopics().containsKey(topicId)) {
+										usr.getSavedTopics().remove(topicId);
+									}
+									if(usr.getLikedTopics().containsKey(topicId)) {
+										usr.getLikedTopics().remove(topicId);
+									}
+									if(usr.getDislikedTopics().containsKey(topicId)) {
+										usr.getDislikedTopics().remove(topicId);
+									}
+								}
+								
 								db.saveDatabase();
 								
 								return "Topic deleted!";
