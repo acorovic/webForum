@@ -201,7 +201,7 @@ function createSubforumRow(subforum) {
 				'<div class="row"><div class="col-sm-6 col-md-8">';
 	row += header;
 	if(subforum.icon == "") {
-		subforum.icon = "test.png";
+		subforum.icon = "slicica.png";
 	}
 	row += '<h4> <img src="' + subforum.icon + '">' + subforum.name + '</h4>';
 	row += '<h4> Description: </h4>' + subforum.description + '<br>';
@@ -1090,7 +1090,7 @@ function addTopicsClickHandlers(topics, subforumId) {
 
 function createSubforumPreviewPanel(subforum) {
 	if(subforum.icon == "") {
-         subforum.icon = "test.png";
+         subforum.icon = "slicica.png";
     }
 	
 	var ret;

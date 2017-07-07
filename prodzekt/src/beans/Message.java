@@ -9,7 +9,6 @@ public class Message implements Serializable{
 	private String content;
 	
 	private boolean seen;
-	private boolean isReport;
 	private int messageId;
 
 	public Message() {
@@ -22,7 +21,6 @@ public class Message implements Serializable{
 		this.receiver = receiver;
 		this.content = content;
 		this.seen = false;
-		this.isReport = false;
 		this.messageId = hashCode();
 	}
 	
@@ -58,12 +56,7 @@ public class Message implements Serializable{
 	public void setSeen(boolean seen) {
 		this.seen = seen;
 	}
-	public boolean isReport() {
-		return isReport;
-	}
-	public void setReport(boolean isReport) {
-		this.isReport = isReport;
-	}
+	
 	
 	
 	

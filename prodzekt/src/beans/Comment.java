@@ -21,7 +21,6 @@ public class Comment implements Serializable{
 	
 	@JsonIgnore
 	private Comment parentComment;
-	//private List<Comment> childComments;
 	
 	@JsonBackReference
 	private Topic parentTopic;

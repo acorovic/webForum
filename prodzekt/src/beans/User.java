@@ -19,8 +19,7 @@ public class User implements Serializable {
 	private String registrationDate;
 	
 	private Role role;
-	
-	private List<Subforum> followedSubforums;
+
 	private List<Message> receivedMessages;
 	
 	private HashMap<Integer, String> likedTopics;
@@ -47,7 +46,6 @@ public class User implements Serializable {
 		this.registrationDate = (new Date()).toString();
 		this.role = Role.USER;
 		
-		this.followedSubforums = new ArrayList<Subforum>();
 		this.receivedMessages = new ArrayList<Message>();
 		
 		this.likedTopics = new HashMap<Integer, String>();	
@@ -152,13 +150,6 @@ public class User implements Serializable {
 		this.receivedMessages = receivedMessages;
 	}
 
-	public List<Subforum> getFollowedSubforums() {
-		return followedSubforums;
-	}
-
-	public void setFollowedSubforums(List<Subforum> followedSubforums) {
-		this.followedSubforums = followedSubforums;
-	}
 
 
 	public String getUsername() {

@@ -34,8 +34,8 @@ public class WebApplication implements Serializable {
 		users.add(admin);
 		users.add(mod1);
 		
-		Subforum sub1 = new Subforum("kuinja", "kuvanje", "", "nista", admin);
-		Subforum sub2 = new Subforum("bicikli", "razni", "", "nema", mod1);
+		Subforum sub1 = new Subforum("kuinja", "kuvanje", "slicica.png", "nista", admin);
+		Subforum sub2 = new Subforum("bicikli", "razni", "slicica.png", "nema", mod1);
 		
 		Topic top1 = new Topic("pasulj", user1, "kako napraviti", Integer.toString(sub1.getSubforumId()));
 		Topic top2 = new Topic("riza", admin, "ne valja", Integer.toString(sub1.getSubforumId()));
@@ -43,7 +43,7 @@ public class WebApplication implements Serializable {
 		Comment com1 = new Comment(admin, "testKomentar", top1, null);
 		Comment com2 = new Comment(user1,"drugi teszt komentar poy",top1,null);
 		
-		Report rep1 = new Report(user1.getUsername(), "JEBO SVILJU", top1,top1.getTopicId());
+		Report rep1 = new Report(user1.getUsername(), "Test report", top1,top1.getTopicId());
 		reports.add(rep1);
 		
 		top1.addComent(com1);
